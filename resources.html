@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>rooted/pwr — Resource + Template Bundle</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #3B1F5E; --purple-light: #6B4FA0; --purple-pale: #EDE8F5;
+    --orange: #E8610A; --orange-light: #F5A46B; --orange-pale: #FDF0E8;
+    --cream: #F8F4EE; --gray: #6B6B6B; --gray-light: #F0EDE8;
+    --green: #2D7D46; --green-pale: #E8F5ED;
+    --red: #C0392B; --red-pale: #FDEAEA;
+    --yellow: #D4A017; --yellow-pale: #FDF8E6;
+    --shadow: 0 2px 12px rgba(59,31,94,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: #2A1A40; }
+
+  .top-bar {
+    background: var(--purple); color: white; padding: 16px 28px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  .logo { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; }
+  .logo span { color: var(--orange-light); }
+  .top-bar .sub { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+
+  .resource-nav {
+    background: white; border-bottom: 3px solid var(--orange);
+    display: flex; overflow-x: auto; box-shadow: var(--shadow); padding: 0 8px;
+  }
+  .rnav-btn {
+    padding: 11px 16px; font-size: 12px; font-weight: 500; color: var(--gray);
+    cursor: pointer; border: none; background: none; white-space: nowrap;
+    border-bottom: 3px solid transparent; margin-bottom: -3px;
+    transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+  }
+  .rnav-btn:hover { color: var(--purple); background: var(--purple-pale); }
+  .rnav-btn.active { color: var(--orange); font-weight: 600; border-bottom-color: var(--orange); }
+
+  .main { max-width: 900px; margin: 0 auto; padding: 24px 20px; }
+  .resource-panel { display: none; }
+  .resource-panel.active { display: block; }
+
+  .resource-header {
+    background: white; border-radius: 12px; padding: 24px 28px; margin-bottom: 20px;
+    border-left: 6px solid var(--orange); box-shadow: var(--shadow);
+  }
+  .resource-header h1 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--purple); margin-bottom: 4px; }
+  .resource-header .meta { font-size: 12px; color: var(--orange); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .resource-header p { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+  .form-section { background: white; border-radius: 10px; padding: 20px 24px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .form-section h3 { font-family: 'Fraunces', serif; font-size: 16px; color: var(--purple); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--orange-pale); }
+
+  .field-group { margin-bottom: 14px; }
+  .field-group label { display: block; font-size: 12px; font-weight: 600; color: var(--gray); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .field-group input, .field-group select, .field-group textarea {
+    width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; color: #333; background: white;
+    transition: border-color 0.2s;
+  }
+  .field-group input:focus, .field-group select:focus, .field-group textarea:focus {
+    outline: none; border-color: var(--purple);
+  }
+  .field-group textarea { min-height: 80px; resize: vertical; }
+  .field-group .hint { font-size: 11px; color: var(--gray); margin-top: 4px; font-style: italic; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+  .scale-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .scale-row label { min-width: 200px; flex: 1; font-size: 13px; color: #333; }
+  .scale-btns { display: flex; gap: 4px; }
+  .scale-btn {
+    width: 32px; height: 32px; border: 2px solid #ddd; border-radius: 6px; background: none;
+    font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif; color: var(--gray);
+  }
+  .scale-btn.selected { background: var(--purple); border-color: var(--purple); color: white; }
+  .scale-btn:hover:not(.selected) { border-color: var(--orange); color: var(--orange); }
+
+  .table-input { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .table-input th { background: var(--purple); color: white; padding: 8px 10px; font-size: 12px; font-weight: 600; text-align: left; }
+  .table-input td { padding: 4px 6px; border-bottom: 1px solid var(--gray-light); }
+  .table-input td input, .table-input td textarea, .table-input td select {
+    width: 100%; padding: 6px 8px; border: 1px solid #ddd; border-radius: 4px;
+    font-size: 12px; font-family: 'DM Sans', sans-serif;
+  }
+  .table-input tr:nth-child(even) td { background: var(--cream); }
+  .table-input tr:nth-child(even) td input, .table-input tr:nth-child(even) td textarea { background: var(--cream); }
+
+  .add-row-btn { margin-top: 6px; background: none; border: 1px dashed var(--orange); color: var(--orange); padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .add-row-btn:hover { background: var(--orange-pale); }
+
+  .print-btn {
+    background: var(--orange); color: white; border: none; padding: 10px 20px;
+    border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; margin-bottom: 16px;
+  }
+  .print-btn:hover { background: #C54A00; }
+
+  .rating-guide { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .rating-guide .chip { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .chip-1 { background: var(--red-pale); color: var(--red); }
+  .chip-2 { background: var(--orange-pale); color: var(--orange); }
+  .chip-3 { background: var(--yellow-pale); color: var(--yellow); }
+  .chip-4 { background: var(--green-pale); color: var(--green); }
+  .chip-5 { background: var(--purple-pale); color: var(--purple); }
+
+  .risk-row { display: grid; grid-template-columns: 2fr 1fr 1fr 2fr; gap: 6px; align-items: start; margin-bottom: 6px; }
+  @media (max-width: 640px) { .risk-row { grid-template-columns: 1fr; } }
+
+  .section-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--orange); margin: 16px 0 6px;
+  }
+
+  .proof-card { border: 1px solid var(--gray-light); border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+  .proof-card h4 { font-size: 13px; font-weight: 600; color: var(--purple); margin-bottom: 8px; }
+
+  .capstone-slide {
+    border: 2px solid var(--purple-pale); border-radius: 8px; padding: 16px;
+    margin-bottom: 12px; background: white;
+  }
+  .capstone-slide .slide-num { font-family: 'Fraunces', serif; font-size: 24px; color: var(--orange); font-weight: 700; float: left; margin-right: 12px; }
+  .capstone-slide h4 { font-size: 14px; font-weight: 600; color: var(--purple); margin-bottom: 6px; }
+  .capstone-slide p { font-size: 12px; color: var(--gray); margin-bottom: 8px; font-style: italic; }
+  .capstone-slide textarea { width: 100%; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; min-height: 70px; resize: vertical; font-family: 'DM Sans', sans-serif; }
+
+  @media print {
+    .top-bar, .resource-nav, .print-btn { display: none !important; }
+    .resource-panel { display: block !important; }
+    .form-section { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <div class="logo">rooted<span>/pwr</span></div>
+    <div class="sub">Resource + Template Bundle · 2026 Fellowship</div>
+  </div>
+  <button class="print-btn" onclick="window.print()">🖨 Print / Export PDF</button>
+</div>
+
+<div class="resource-nav">
+  <button class="rnav-btn active" onclick="showResource('r1')">1. Readiness Intake</button>
+  <button class="rnav-btn" onclick="showResource('r2')">2. Baseline Diagnostic</button>
+  <button class="rnav-btn" onclick="showResource('r3')">3. Initiative Profile</button>
+  <button class="rnav-btn" onclick="showResource('r4')">4. Role + Decision Map</button>
+  <button class="rnav-btn" onclick="showResource('r5')">5. Scope + Outcomes Sheet</button>
+  <button class="rnav-btn" onclick="showResource('r6')">6. 90-Day Work Plan</button>
+  <button class="rnav-btn" onclick="showResource('r7')">7. Collab Table Memo</button>
+  <button class="rnav-btn" onclick="showResource('r8')">8. Risk Register</button>
+  <button class="rnav-btn" onclick="showResource('r9')">9. Proof Points Log</button>
+  <button class="rnav-btn" onclick="showResource('r10')">10. Capstone Deck</button>
+</div>
+
+<div class="main">
+
+<!-- ════════════════════ R1: READINESS INTAKE ════════════════════ -->
+<div id="panel-r1" class="resource-panel active">
+  <div class="resource-header">
+    <div class="meta">Resource 1 · Release: Application Close — June Onboarding</div>
+    <h1>Readiness Intake</h1>
+    <p>Captures your live case, current implementation barriers, team composition, and desired proof points. Complete this before or during the application process. Your responses help PERC assess fit and tailor onboarding support.</p>
+  </div>
+
+  <div class="form-section">
+    <h3>Organization + Team Information</h3>
+    <div class="two-col">
+      <div class="field-group"><label>Organization or Coalition Name</label><input type="text" placeholder="Full legal name"></div>
+      <div class="field-group"><label>City, State</label><input type="text" placeholder="e.g. Atlanta, GA"></div>
+    </div>
+    <div class="two-col">
+      <div class="field-group"><label>EIN / Fiscal Sponsor EIN</label><input type="text" placeholder="XX-XXXXXXX"></div>
+      <div class="field-group"><label>Website</label><input type="text" placeholder="https://"></div>
+    </div>
+    <div class="field-group"><label>Annual Operating Budget Range</label>
+      <select>
+        <option value="">Select range…</option>
+        <option>Under $250,000</option>
+        <option>$250,000 – $500,000</option>
+        <option>$500,000 – $1M</option>
+        <option>$1M – $3M</option>
+        <option>$3M – $5M</option>
+        <option>Over $5M</option>
+      </select>
+    </div>
+    <div class="field-group"><label>Mission Statement / North Star Goal</label><textarea placeholder="Your organization's mission or theory of change…"></textarea></div>
+  </div>
+
+  <div class="form-section">
+    <h3>Three-Person Fellowship Team</h3>
+    <table class="table-input">
+      <thead><tr><th>Role</th><th>Full Name</th><th>Title</th><th>Email</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Organization Leader</strong><br><span style="font-size:11px;color:var(--gray)">Senior decision-maker</span></td><td><input type="text"></td><td><input type="text"></td><td><input type="email"></td></tr>
+        <tr><td><strong>Initiative Leader</strong><br><span style="font-size:11px;color:var(--gray)">Project/program lead</span></td><td><input type="text"></td><td><input type="text"></td><td><input type="email"></td></tr>
+        <tr><td><strong>Community Resident</strong><br><span style="font-size:11px;color:var(--gray)">Lived-experience voice</span></td><td><input type="text"></td><td><input type="text"></td><td><input type="email"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-section">
+    <h3>Live Case + Initiative</h3>
+    <div class="field-group"><label>Name of Initiative or Project</label><input type="text" placeholder="What is the initiative called?"></div>
+    <div class="field-group"><label>PERC Investment Area</label>
+      <select><option>Work-Wage-Wealth Mobility</option><option>Living Communities</option><option>Both</option></select>
+    </div>
+    <div class="field-group"><label>Describe the initiative (250 words max)</label><textarea placeholder="What are you doing, for whom, and where? What specific justice challenge does it address?"></textarea><div class="hint">Include any lived or hard data that grounds the need.</div></div>
+    <div class="field-group"><label>Current Implementation Status</label>
+      <select>
+        <option>Conceptual — not yet designed</option>
+        <option>Planning — designing the approach</option>
+        <option>Early implementation — first activities underway</option>
+        <option>Active implementation — momentum built</option>
+        <option>Scaling — replicating or expanding</option>
+      </select>
+    </div>
+    <div class="field-group"><label>Key implementation barriers you face</label><textarea placeholder="What has slowed, stalled, or blocked progress? Be specific."></textarea></div>
+  </div>
+
+  <div class="form-section">
+    <h3>Desired Proof Points</h3>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:12px">A year from now, if rooted/pwr is successful, what will be different? List up to three specific proof points you hope to have achieved.</p>
+    <div class="field-group"><label>Proof Point 1</label><input type="text" placeholder="e.g. 90-day work plan fully executed, all milestones met"></div>
+    <div class="field-group"><label>Proof Point 2</label><input type="text" placeholder="e.g. Stakeholder table meeting monthly with documented decisions"></div>
+    <div class="field-group"><label>Proof Point 3</label><input type="text" placeholder="e.g. Grant application submitted using new project management framework"></div>
+    <div class="field-group"><label>What would you most like to walk away with from this fellowship?</label><textarea placeholder="Skills, tools, relationships, frameworks…"></textarea></div>
+  </div>
+
+  <div class="form-section">
+    <h3>Team Readiness Check</h3>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:12px">Rate your team's current readiness on each dimension (1 = not at all ready, 5 = very ready).</p>
+    <div class="rating-guide">
+      <div class="chip chip-1">1 = Not ready</div><div class="chip chip-2">2 = Emerging</div>
+      <div class="chip chip-3">3 = Developing</div><div class="chip chip-4">4 = Strong</div><div class="chip chip-5">5 = Very ready</div>
+    </div>
+    <div id="readiness-scales"></div>
+    <script>
+      const rItems = ["All three team members are committed to the full 5-month fellowship","We have a concrete, active initiative to bring as our live case","Our team has the capacity to commit ~20 hours/month","We believe project management is essential to community impact","Leadership is aligned on participating and sharing decision-making"];
+      const rs = document.getElementById('readiness-scales');
+      rItems.forEach((item,i) => {
+        const div = document.createElement('div');
+        div.className = 'scale-row';
+        div.innerHTML = `<label>${item}</label><div class="scale-btns">${[1,2,3,4,5].map(n=>`<button class="scale-btn" onclick="selectScale(this)">${n}</button>`).join('')}</div>`;
+        rs.appendChild(div);
+      });
+      function selectScale(btn) {
+        btn.closest('.scale-btns').querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      }
+    </script>
+    <div class="field-group" style="margin-top:12px"><label>Anything else PERC should know?</label><textarea placeholder="Constraints, questions, context…"></textarea></div>
+  </div>
+</div>
+
+<!-- ════════════════════ R2: BASELINE DIAGNOSTIC ════════════════════ -->
+<div id="panel-r2" class="resource-panel">
+  <div class="resource-header">
+    <div class="meta">Resource 2 · Release: Before June 23</div>
+    <h1>Baseline Diagnostic</h1>
+    <p>Identifies your team's current confidence and skill levels across the core rooted/pwr competencies. Complete individually, then compare as a team. Your honest responses help PERC design targeted coaching and support.</p>
+  </div>
+
+  <div class="form-section">
+    <h3>About You</h3>
+    <div class="two-col">
+      <div class="field-group"><label>Name</label><input type="text"></div>
+      <div class="field-group"><label>Role on Fellowship Team</label>
+        <select><option>Organization Leader</option><option>Initiative Leader</option><option>Community Resident</option></select>
+      </div>
+    </div>
+    <div class="field-group"><label>Date Completed</label><input type="date"></div>
+  </div>
+
+  <div class="form-section">
+    <h3>Skill Confidence Ratings</h3>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:12px">Rate your current confidence on each skill. Be honest — this is a starting point, not a judgment.</p>
+    <div class="rating-guide">
+      <div class="chip chip-1">1 = No experience</div><div class="chip chip-2">2 = Some exposure</div>
+      <div class="chip chip-3">3 = Developing</div><div class="chip chip-4">4 = Confident</div><div class="chip chip-5">5 = Teach others</div>
+    </div>
+    <div id="diag-scales"></div>
+    <script>
+      const dItems = [
+        ["Planning + Sequencing", "Breaking complex work into phases, milestones, and tasks"],
+        ["Work Plan Development", "Building 90-day or longer plans with owners, deadlines, and dependencies"],
+        ["Scope Management", "Defining what's in and out of an initiative's scope"],
+        ["Outcome + Measurement", "Writing better-off measures and tracking progress"],
+        ["Stakeholder Facilitation", "Designing and running collaborative tables or meetings"],
+        ["Communication + Reporting", "Sharing updates clearly and concisely with different audiences"],
+        ["Risk Management", "Identifying, monitoring, and responding to implementation risks"],
+        ["Shared Decision-Making", "Distributing authority and managing decisions across a team"],
+        ["Sustainability Planning", "Building systems that outlast any single person or grant"],
+        ["Catalytic Capital Readiness", "Understanding what funders look for and how PM signals readiness"],
+      ];
+      const ds = document.getElementById('diag-scales');
+      dItems.forEach(([title, desc]) => {
+        const div = document.createElement('div');
+        div.style.marginBottom = '14px';
+        div.innerHTML = `<div style="margin-bottom:6px"><span style="font-weight:600;font-size:13px;color:var(--purple)">${title}</span><span style="font-size:11px;color:var(--gray);margin-left:6px">${desc}</span></div>
+          <div class="scale-btns">${[1,2,3,4,5].map(n=>`<button class="scale-btn" onclick="selectScale(this)">${n}</button>`).join('')}</div>`;
+        ds.appendChild(div);
+      });
+    </script>
+  </div>
+
+  <div class="form-section">
+    <h3>Open Reflection</h3>
+    <div class="field-group"><label>What is working well in how your team currently implements projects?</label><textarea></textarea></div>
+    <div class="field-group"><label>Where do implementation systems most often break down for your team?</label><textarea></textarea></div>
+    <div class="field-group"><label>What one skill, if strengthened, would have the biggest impact on your live initiative?</label><textarea></textarea></div>
+    <div class="field-group"><label>What do you hope to feel more confident about by November?</label><textarea></textarea></div>
+  </div>
+</div>
+
+<!-- ════════════════════ R3: INITIATIVE PROFILE ════════════════════ -->
+<div id="panel-r3" class="resource-panel">
+  <div class="resource-header">
+    <div class="meta">Resource 3 · Release: June — Evolves Throughout Fellowship</div>
+    <h1>Initiative Profile Template</h1>
+    <p>A one-page living snapshot of your live case. Update this after each phase to reflect what you've learned and what has shifted.</p>
+  </div>
+
+  <div class="form-section">
+    <h3>Initiative at a Glance</h3>
+    <div class="two-col">
+      <div class="field-group"><label>Initiative Name</label><input type="text"></div>
+      <div class="field-group"><label>Version / Date</label><input type="text" placeholder="e.g. v1 — June 2026"></div>
+    </div>
+    <div class="field-group"><label>Organization</label><input type="text"></div>
+    <div class="field-group"><label>One-Sentence Description</label><input type="text" placeholder="What is this initiative, for whom, and toward what change?"></div>
+  </div>
+
+  <div class="form-section">
+    <h3>The Problem</h3>
+    <div class="field-group"><label>What specific justice issue is this initiative addressing? (include data)</label><textarea placeholder="Use lived or hard data to name the problem clearly."></textarea></div>
+    <div class="field-group"><label>Who is most impacted, and how?</label><textarea></textarea></div>
+    <div class="field-group"><label>Why has this problem persisted?</label><textarea placeholder="Root causes, systemic factors…"></textarea></div>
+  </div>
+
+  <div class="form-section">
+    <h3>The Approach</h3>
+    <div class="field-group"><label>What is your team doing, and how?</label><textarea placeholder="Describe your core strategy, activities, and approach."></textarea></div>
+    <div class="field-group"><label>What is the theory of change? (If X, then Y)</label><input type="text" placeholder="If we do [strategy], then [community change] will happen because [assumption]"></div>
+    <div class="field-group"><label>Who is involved? (Partners, stakeholders, community)</label><textarea></textarea></div>
+  </div>
+
+  <div class="form-section">
+    <h3>Success + Proof Points</h3>
+    <div class="field-group"><label>What does success look like in 1 year?</label><textarea placeholder="Paint the picture. What is different for the community?"></textarea></div>
+    <div class="field-group"><label>What are your three core proof points for this fellowship period?</label>
+      <input type="text" placeholder="Proof Point 1" style="margin-bottom:6px">
+      <input type="text" placeholder="Proof Point 2" style="margin-bottom:6px">
+      <input type="text" placeholder="Proof Point 3">
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>Current Status + Barriers</h3>
+    <div class="field-group"><label>Current implementation status</label>
+      <select><option>Conceptual</option><option>Planning</option><option>Early implementation</option><option>Active implementation</option><option>Scaling</option></select>
+    </div>
+    <div class="field-group"><label>Top implementation barriers right now</label><textarea></textarea></div>
+    <div class="field-group"><label>What rooted/pwr skills would most help this initiative?</label><textarea></textarea></div>
+  </div>
+</div>
+
+<!-- ════════════════════ R4: ROLE + DECISION MAP ════════════════════ -->
+<div id="panel-r4" class="resource-panel">
+  <div class="resource-header">
+    <div class="meta">Resource 4 · Release: July</div>
+    <h1>Role + Decision Map</h1>
+    <p>Clarifies authority, shared leadership, and escalation pathways across your three-person fellowship team. Use the RACI framework to prevent confusion, diffuse power appropriately, and ensure the community resident has real decision-making authority.</p>
+  </div>
+
+  <div class="form-section">
+    <h3>Team Member Roles</h3>
+    <table class="table-input">
+      <thead><tr><th>Role</th><th>Person</th><th>Primary Responsibilities</th><th>Decision Authority</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Organization Leader</strong></td><td><input type="text" placeholder="Name"></td><td><textarea style="min-height:60px"></textarea></td><td><textarea style="min-height:60px"></textarea></td></tr>
+        <tr><td><strong>Initiative Leader</strong></td><td><input type="text" placeholder="Name"></td><td><textarea style="min-height:60px"></textarea></td><td><textarea style="min-height:60px"></textarea></td></tr>
+        <tr><td><strong>Community Resident</strong></td><td><input type="text" placeholder="Name"></td><td><textarea style="min-height:60px"></textarea></td><td><textarea style="min-height:60px"></textarea></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-section">
+    <h3>Decision Rights Matrix (RACI)</h3>
+    <p style="font-size:12px;color:var(--gray);margin-bottom:10px"><strong>R</strong> = Responsible (does the work) · <strong>A</strong> = Accountable (final say) · <strong>C</strong> = Consulted · <strong>I</strong> = Informed</p>
+    <table class="table-input" id="raci-table">
+      <thead><tr><th>Decision / Action Area</th><th>Org Leader</th><th>Initiative Leader</th><th>Community Resident</th></tr></thead>
+      <tbody id="raci-body"></tbody>
+    </table>
+    <button class="add-row-btn" onclick="addRaciRow()">+ Add Row</button>
+    <script>
+      const raciItems = ["Major strategic decisions","Day-to-day task management","Stakeholder communications","Budget approvals","Community engagement activities","Team meeting facilitation","External reporting","Risk escalation","Fellowship assignments and submissions","Community narrative / storytelling"];
+      const raciBody = document.getElementById('raci-body');
+      function addRaciRow(val='') {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><input type="text" value="${val}" placeholder="Decision or action area"></td>
+          ${['','',''].map(()=>`<td><select><option></option><option>R</option><option>A</option><option>C</option><option>I</option><option>R/A</option></select></td>`).join('')}`;
+        raciBody.appendChild(tr);
+      }
+      raciItems.forEach(r => addRaciRow(r));
+    </script>
+  </div>
+
+  <div class="form-section">
+    <h3>Escalation Protocol</h3>
+    <div class="field-group"><label>When there is a conflict or disagreement, how will the team resolve it?</label><textarea placeholder="e.g. 48-hour cooling period, then structured conversation with agreed facilitator…"></textarea></div>
+    <div class="field-group"><label>What decisions require full team consensus vs. individual authority?</label><textarea></textarea></div>
+    <div class="field-group"><label>How will the community resident's input be protected and honored?</label><textarea placeholder="e.g. veto on community-facing decisions, required consultation before all external commitments…"></textarea></div>
+    <div class="field-group"><label>Who is the external escalation contact if the team reaches an impasse?</label><input type="text" placeholder="Name + contact info"></div>
+  </div>
+
+  <div class="form-section">
+    <h3>Team Operating Agreements</h3>
+    <div class="field-group"><label>How often will the team meet (outside of fellowship sessions)?</label><input type="text" placeholder="e.g. Weekly 30-min check-in every Tuesday at 9AM"></div>
+    <div class="field-group"><label>What are our norms for communication and responsiveness?</label><textarea></textarea></div>
+    <div class="field-group"><label>What does respectful disagreement look like on this team?</label><textarea></textarea></div>
+  </div>
+</div>
+
+<!-- ════════════════════ R5: SCOPE + OUTCOMES SHEET ════════════════════ -->
+<div id="panel-r5" class="resource-panel">
+  <div class="resource-header">
+    <div class="meta">Resource 5 · Release: August</div>
+    <h1>Scope + Outcomes Sheet</h1>
+    <p>Links your initiative's activities, outputs, outcomes, and better-off measures to your live case. Use this to make sure your work is scoped tightly enough to be achievable and measured meaningfully.</p>
+  </div>
+
+  <div class="form-section">
+    <h3>Initiative Summary</h3>
+    <div class="field-group"><label>Initiative Name</label><input type="text"></div>
+    <div class="field-group"><label>Fellowship Phase</label><input type="text" placeholder="e.g. Phase 2 — August 2026"></div>
+    <div class="field-group"><label>Primary Goal Statement</label><input type="text" placeholder="In one sentence, what is this initiative trying to achieve?"></div>
+  </div>
+
+  <div class="form-section">
+    <h3>Scope Boundaries</h3>
+    <div class="two-col">
+      <div class="field-group"><label>✅ In Scope (what we ARE doing)</label><textarea placeholder="List the specific activities and populations included…"></textarea></div>
+      <div class="field-group"><label>🚫 Out of Scope (what we are NOT doing, for now)</label><textarea placeholder="What have you deliberately set aside to focus the work?"></textarea></div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>Activities → Outputs → Outcomes</h3>
+    <table class="table-input">
+      <thead><tr><th>Activity</th><th>Output (what you produce)</th><th>Short-Term Outcome</th><th>Better-Off Measure</th></tr></thead>
+      <tbody id="outcome-body"></tbody>
+    </table>
+    <button class="add-row-btn" onclick="addOutcomeRow()">+ Add Row</button>
+    <script>
+      const ob = document.getElementById('outcome-body');
+      function addOutcomeRow() {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><input type="text" placeholder="e.g. Monthly stakeholder table"></td><td><input type="text" placeholder="e.g. Meeting notes + decision log"></td><td><input type="text" placeholder="e.g. Stakeholders aligned on priorities"></td><td><input type="text" placeholder="e.g. 4+ stakeholders attend 80% of meetings"></td>`;
+        ob.appendChild(tr);
+      }
+      for(let i=0;i<4;i++) addOutcomeRow();
+    </script>
+  </div>
+
+  <div class="form-section">
+    <h3>Better-Off Measures</h3>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:10px">Better-off measures ask: "What will be different for people because of this work?" They are not just activity counts.</p>
+    <table class="table-input">
+      <thead><tr><th>What we will measure</th><th>Baseline (now)</th><th>Target by Nov 2026</th><th>How we'll know</th></tr></thead>
+      <tbody id="bom-body"></tbody>
+    </table>
+    <button class="add-row-btn" onclick="addBOMRow()">+ Add Row</button>
+    <script>
+      const bom = document.getElementById('bom-body');
+      function addBOMRow() {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>`;
+        bom.appendChild(tr);
+      }
+      for(let i=0;i<3;i++) addBOMRow();
+    </script>
+  </div>
+</div>
+
+<!-- ════════════════════ R6: 90-DAY WORK PLAN ════════════════════ -->
+<div id="panel-r6" class="resource-panel">
+  <div class="resource-header">
+    <div class="meta">Resource 6 · Release: August</div>
+    <h1>90-Day Work Plan Template</h1>
+    <p>A workback schedule with milestones, owners, dependencies, and notes. Build this from the end: start with your proof points and work backward to today's tasks.</p>
+  </div>
+
+  <div class="form-section">
+    <h3>Plan Header</h3>
+    <div class="two-col">
+      <div class="field-group"><label>Initiative Name</label><input type="text"></div>
+      <div class="field-group"><label>Plan Period</label><input type="text" placeholder="e.g. August 6 – November 5, 2026"></div>
+    </div>
+    <div class="field-group"><label>Primary Goal for this 90-Day Period</label><input type="text"></div>
+    <div class="field-group"><label>Success looks like…</label><input type="text" placeholder="By November 5, we will have…"></div>
+  </div>
+
+  <div class="form-section">
+    <h3>Key Milestones</h3>
+    <table class="table-input">
+      <thead><tr><th>Milestone</th><th>Target Date</th><th>Owner</th><th>Status</th></tr></thead>
+      <tbody id="milestone-body"></tbody>
+    </table>
+    <button class="add-row-btn" onclick="addMilestoneRow()">+ Add Milestone</button>
+    <script>
+      const mb = document.getElementById('milestone-body');
+      function addMilestoneRow() {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><input type="text" placeholder="e.g. First stakeholder table meeting held"></td><td><input type="date"></td><td><input type="text"></td><td><select><option>Not Started</option><option>In Progress</option><option>Complete</option><option>Delayed</option></select></td>`;
+        mb.appendChild(tr);
+      }
+      for(let i=0;i<5;i++) addMilestoneRow();
+    </script>
+  </div>
+
+  <div class="form-section">
+    <h3>Weekly Task Breakdown</h3>
+    <table class="table-input">
+      <thead><tr><th>Week Of</th><th>Task</th><th>Owner</th><th>Depends On</th><th>Status</th><th>Notes</th></tr></thead>
+      <tbody id="task90-body"></tbody>
+    </table>
+    <button class="add-row-btn" onclick="addTask90Row()">+ Add Task</button>
+    <script>
+      const t90 = document.getElementById('task90-body');
+      function addTask90Row() {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><input type="date"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text" placeholder="What must happen first?"></td><td><select><option>Not Started</option><option>In Progress</option><option>Done</option><option>Blocked</option></select></td><td><input type="text"></td>`;
+        t90.appendChild(tr);
+      }
+      for(let i=0;i<8;i++) addTask90Row();
+    </script>
+  </div>
+
+  <div class="form-section">
+    <h3>Dependency Map</h3>
+    <div class="field-group"><label>What is most likely to stall progress?</label><textarea></textarea></div>
+    <div class="field-group"><label>Approvals, resources, or decisions we need from others</label><textarea placeholder="List external dependencies and who owns them…"></textarea></div>
+    <div class="field-group"><label>Recurring meetings that support this plan</label>
+      <table class="table-input"><thead><tr><th>Meeting</th><th>Frequency</th><th>Participants</th><th>Purpose</th></tr></thead>
+      <tbody><tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ R7: COLLAB TABLE MEMO ════════════════════ -->
+<div id="panel-r7" class="resource-panel">
+  <div class="resource-header">
+    <div class="meta">Resource 7 · Release: August</div>
+    <h1>Collaborative Table Memo + Share-Out Template</h1>
+    <p>Supports meeting design, follow-through, and concise reporting across stakeholders. Use the Memo to plan collaborative tables; use the Share-Out Template to report decisions and next steps after each meeting.</p>
+  </div>
+
+  <div class="form-section">
+    <h3>Part A: Collaborative Table Design Memo</h3>
+    <div class="two-col">
+      <div class="field-group"><label>Meeting / Table Name</label><input type="text"></div>
+      <div class="field-group"><label>Date + Time</label><input type="text"></div>
+    </div>
+    <div class="two-col">
+      <div class="field-group"><label>Location / Platform</label><input type="text"></div>
+      <div class="field-group"><label>Facilitator</label><input type="text"></div>
+    </div>
+    <div class="field-group"><label>Purpose of this Table</label><textarea placeholder="What is the specific reason this group convenes? What would make this meeting a success?"></textarea></div>
+    <div class="field-group"><label>Participants + Their Stake</label>
+      <table class="table-input"><thead><tr><th>Name / Role</th><th>Organization</th><th>Their Stake</th><th>Power Position</th></tr></thead>
+      <tbody id="participant-body"></tbody></table>
+      <button class="add-row-btn" onclick="addParticipantRow()">+ Add Participant</button>
+      <script>
+        const pb = document.getElementById('participant-body');
+        function addParticipantRow() {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><select><option>Decision-maker</option><option>Influencer</option><option>Implementor</option><option>Community voice</option><option>Observer</option></select></td>`;
+          pb.appendChild(tr);
+        }
+        for(let i=0;i<4;i++) addParticipantRow();
+      </script>
+    </div>
+    <div class="field-group"><label>Agenda (max 3 items — be disciplined)</label>
+      <table class="table-input"><thead><tr><th>#</th><th>Agenda Item</th><th>Time</th><th>Type</th><th>Lead</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><input type="text"></td><td><input type="text" placeholder="e.g. 15 min"></td><td><select><option>Decision</option><option>Discussion</option><option>Information</option><option>Action</option></select></td><td><input type="text"></td></tr>
+        <tr><td>2</td><td><input type="text"></td><td><input type="text"></td><td><select><option>Decision</option><option>Discussion</option><option>Information</option><option>Action</option></select></td><td><input type="text"></td></tr>
+        <tr><td>3</td><td><input type="text"></td><td><input type="text"></td><td><select><option>Decision</option><option>Discussion</option><option>Information</option><option>Action</option></select></td><td><input type="text"></td></tr>
+      </tbody></table>
+    </div>
+    <div class="field-group"><label>Power considerations for this meeting</label><textarea placeholder="Who might dominate? Who might be silenced? How will you create space for authentic participation?"></textarea></div>
+  </div>
+
+  <div class="form-section">
+    <h3>Part B: Post-Meeting Share-Out Template</h3>
+    <div class="two-col">
+      <div class="field-group"><label>Meeting Name + Date</label><input type="text"></div>
+      <div class="field-group"><label>Prepared by</label><input type="text"></div>
+    </div>
+    <div class="field-group"><label>Key Decisions Made</label>
+      <table class="table-input"><thead><tr><th>Decision</th><th>Who Decided</th></tr></thead>
+      <tbody><tr><td><input type="text"></td><td><input type="text"></td></tr><tr><td><input type="text"></td><td><input type="text"></td></tr><tr><td><input type="text"></td><td><input type="text"></td></tr></tbody>
+    </table></div>
+    <div class="field-group"><label>Action Items</label>
+      <table class="table-input"><thead><tr><th>Action</th><th>Owner</th><th>Due</th></tr></thead>
+      <tbody id="action-body"></tbody></table>
+      <button class="add-row-btn" onclick="addActionRow()">+ Add Action</button>
+      <script>const ab=document.getElementById('action-body');function addActionRow(){const tr=document.createElement('tr');tr.innerHTML=`<td><input type="text"></td><td><input type="text"></td><td><input type="date"></td>`;ab.appendChild(tr);}for(let i=0;i<4;i++)addActionRow();</script>
+    </div>
+    <div class="field-group"><label>Open Questions / Unresolved Items</label><textarea></textarea></div>
+    <div class="field-group"><label>Next Meeting Date + Purpose</label><input type="text"></div>
+  </div>
+</div>
+
+<!-- ════════════════════ R8: RISK REGISTER ════════════════════ -->
+<div id="panel-r8" class="resource-panel">
+  <div class="resource-header">
+    <div class="meta">Resource 8 · Release: September–October</div>
+    <h1>Risk Register + Pivot Protocol</h1>
+    <p>Helps your team document risks, adaptation decisions, and unresolved tensions. Review this at every session in Phase 4. A pivot is not failure — it is disciplined leadership.</p>
+  </div>
+
+  <div class="form-section">
+    <h3>Risk Register</h3>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:10px"><strong>Likelihood:</strong> 1–5 · <strong>Impact:</strong> 1–5 · <strong>Priority = Likelihood × Impact</strong></p>
+    <table class="table-input">
+      <thead><tr><th>Risk Description</th><th>Category</th><th>Likelihood (1–5)</th><th>Impact (1–5)</th><th>Priority</th><th>Mitigation / Response</th><th>Owner</th><th>Status</th></tr></thead>
+      <tbody id="risk-body"></tbody>
+    </table>
+    <button class="add-row-btn" onclick="addRiskRow()">+ Add Risk</button>
+    <script>
+      const rb = document.getElementById('risk-body');
+      function addRiskRow() {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><input type="text"></td>
+          <td><select><option>Capacity</option><option>Stakeholder</option><option>Funding</option><option>Community Trust</option><option>Timeline</option><option>Team</option><option>External</option></select></td>
+          <td><input type="number" min="1" max="5" style="width:50px" oninput="calcPriority(this)"></td>
+          <td><input type="number" min="1" max="5" style="width:50px" oninput="calcPriority(this)"></td>
+          <td><input type="text" style="width:50px;background:var(--yellow-pale)" readonly></td>
+          <td><textarea style="min-height:50px"></textarea></td>
+          <td><input type="text"></td>
+          <td><select><option>Open</option><option>Monitoring</option><option>Mitigated</option><option>Escalated</option><option>Closed</option></select></td>`;
+        rb.appendChild(tr);
+      }
+      function calcPriority(inp) {
+        const td = inp.closest('tr');
+        const nums = td.querySelectorAll('input[type=number]');
+        const p = td.querySelectorAll('td')[4].querySelector('input');
+        const v = (parseInt(nums[0].value)||0) * (parseInt(nums[1].value)||0);
+        p.value = v || '';
+        p.style.background = v >= 15 ? 'var(--red-pale)' : v >= 8 ? 'var(--yellow-pale)' : 'var(--green-pale)';
+      }
+      for(let i=0;i<4;i++) addRiskRow();
+    </script>
+  </div>
+
+  <div class="form-section">
+    <h3>Pivot Protocol</h3>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:10px">A pivot is a strategic course correction — not drift. Use this protocol to distinguish intentional adaptation from scope creep or loss of focus.</p>
+    <div class="field-group"><label>What triggered consideration of a pivot?</label><textarea></textarea></div>
+    <div class="field-group"><label>What is being proposed to change, and why?</label><textarea></textarea></div>
+    <div class="field-group"><label>Does this change serve the original community-rooted goal, or does it shift it?</label><textarea></textarea></div>
+    <div class="field-group"><label>Who must be consulted or informed before finalizing this pivot?</label><textarea></textarea></div>
+    <div class="field-group"><label>Decision</label>
+      <select><option>Proceed with pivot as described</option><option>Proceed with modifications</option><option>Do not pivot — stay the course</option><option>Escalate to PERC or external advisor</option></select>
+    </div>
+    <div class="field-group"><label>Decision rationale and notes</label><textarea></textarea></div>
+    <div class="two-col">
+      <div class="field-group"><label>Decision made by</label><input type="text"></div>
+      <div class="field-group"><label>Date</label><input type="date"></div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>Unresolved Tensions Log</h3>
+    <table class="table-input">
+      <thead><tr><th>Tension / Issue</th><th>Date Identified</th><th>Who It Affects</th><th>Steps Taken</th><th>Status</th></tr></thead>
+      <tbody id="tension-body"></tbody>
+    </table>
+    <button class="add-row-btn" onclick="addTensionRow()">+ Add Tension</button>
+    <script>
+      const tb2 = document.getElementById('tension-body');
+      function addTensionRow() {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><input type="text"></td><td><input type="date"></td><td><input type="text"></td><td><input type="text"></td><td><select><option>Open</option><option>In Progress</option><option>Resolved</option></select></td>`;
+        tb2.appendChild(tr);
+      }
+      for(let i=0;i<3;i++) addTensionRow();
+    </script>
+  </div>
+</div>
+
+<!-- ════════════════════ R9: PROOF POINTS LOG ════════════════════ -->
+<div id="panel-r9" class="resource-panel">
+  <div class="resource-header">
+    <div class="meta">Resource 9 · Release: October</div>
+    <h1>Proof Points Log</h1>
+    <p>Tracks early evidence that rooted project management is shifting practice, coordination, and credibility. Document both qualitative (stories, observations) and quantitative (numbers, rates) evidence. Build this continuously from October through the Capstone.</p>
+  </div>
+
+  <div class="form-section">
+    <h3>Initiative + Team</h3>
+    <div class="two-col">
+      <div class="field-group"><label>Initiative Name</label><input type="text"></div>
+      <div class="field-group"><label>Log Period</label><input type="text" placeholder="e.g. October–November 2026"></div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>Practice Change Evidence</h3>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:10px">What is different about how your team works because of rooted/pwr? Document specific observable changes.</p>
+    <div id="proof-cards"></div>
+    <button class="add-row-btn" onclick="addProofCard()">+ Add Proof Point</button>
+    <script>
+      const pc = document.getElementById('proof-cards');
+      function addProofCard() {
+        const i = pc.children.length + 1;
+        const div = document.createElement('div');
+        div.className = 'proof-card';
+        div.innerHTML = `<h4>Proof Point #${i}</h4>
+          <div class="field-group"><label>What changed?</label><input type="text" placeholder="Describe the specific practice, behavior, or outcome that shifted."></div>
+          <div class="two-col">
+            <div class="field-group"><label>Type of evidence</label>
+              <select><option>Practice change</option><option>Stakeholder feedback</option><option>Milestone achieved</option><option>Data/metric</option><option>Story / narrative</option></select>
+            </div>
+            <div class="field-group"><label>Date observed</label><input type="date"></div>
+          </div>
+          <div class="field-group"><label>Before (what it looked like previously)</label><textarea style="min-height:50px"></textarea></div>
+          <div class="field-group"><label>After (what it looks like now)</label><textarea style="min-height:50px"></textarea></div>
+          <div class="field-group"><label>Supporting evidence or data</label><input type="text" placeholder="Numbers, quotes, documents, observations…"></div>`;
+        pc.appendChild(div);
+      }
+      for(let i=0;i<3;i++) addProofCard();
+    </script>
+  </div>
+
+  <div class="form-section">
+    <h3>Quantitative Progress Indicators</h3>
+    <table class="table-input">
+      <thead><tr><th>Indicator</th><th>Baseline (July)</th><th>Current</th><th>Target (Nov)</th><th>% Progress</th></tr></thead>
+      <tbody id="quant-body"></tbody>
+    </table>
+    <button class="add-row-btn" onclick="addQuantRow()">+ Add Indicator</button>
+    <script>
+      const qb = document.getElementById('quant-body');
+      function addQuantRow() {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text" placeholder="auto or enter %"></td>`;
+        qb.appendChild(tr);
+      }
+      for(let i=0;i<4;i++) addQuantRow();
+    </script>
+  </div>
+
+  <div class="form-section">
+    <h3>Narrative Evidence + Stories</h3>
+    <div class="field-group"><label>What story best illustrates how this initiative has shifted because of rooted/pwr practices?</label><textarea style="min-height:100px"></textarea></div>
+    <div class="field-group"><label>What has a stakeholder or community member said that reflects changed credibility or trust?</label><textarea></textarea></div>
+  </div>
+</div>
+
+<!-- ════════════════════ R10: CAPSTONE DECK ════════════════════ -->
+<div id="panel-r10" class="resource-panel">
+  <div class="resource-header">
+    <div class="meta">Resource 10 · Release: November</div>
+    <h1>Capstone Deck Template</h1>
+    <p>A common format for your team's final reflection, artifacts, and next-step commitments. Present this at Session 10. The goal is not a polished deck — it is honest evidence of changed practice and clear commitments for what comes next.</p>
+  </div>
+
+  <div class="form-section">
+    <h3>Deck Information</h3>
+    <div class="two-col">
+      <div class="field-group"><label>Organization / Initiative</label><input type="text"></div>
+      <div class="field-group"><label>Presentation Date</label><input type="date"></div>
+    </div>
+    <div class="field-group"><label>Team Members Presenting</label><input type="text"></div>
+  </div>
+
+  <div class="form-section">
+    <h3>Slide-by-Slide Content</h3>
+
+    <div class="capstone-slide">
+      <div class="slide-num">1</div>
+      <h4>Who We Are + What We Brought</h4>
+      <p>Team intro, organization overview, and the live initiative you worked on throughout the fellowship.</p>
+      <textarea placeholder="Introduce your team, your organization, and your live initiative in 2–3 sentences each."></textarea>
+    </div>
+
+    <div class="capstone-slide">
+      <div class="slide-num">2</div>
+      <h4>The Problem We Were Solving</h4>
+      <p>The justice issue, the community need, and the implementation gaps you entered the fellowship with.</p>
+      <textarea placeholder="Describe the problem (with data) and what was stalling your team before rooted/pwr."></textarea>
+    </div>
+
+    <div class="capstone-slide">
+      <div class="slide-num">3</div>
+      <h4>Where We Started: Baseline Snapshot</h4>
+      <p>What your team looked like in June — confidence levels, systems, and the state of your initiative.</p>
+      <textarea placeholder="Reference your baseline diagnostic. Where were you weakest? What was fragile?"></textarea>
+    </div>
+
+    <div class="capstone-slide">
+      <div class="slide-num">4</div>
+      <h4>What We Built</h4>
+      <p>The artifacts, tools, and systems you created during the fellowship. Show your work.</p>
+      <textarea placeholder="List and briefly describe: Initiative Profile, Role + Decision Map, 90-Day Work Plan, Scope Sheet, etc. Which have you actually used?"></textarea>
+    </div>
+
+    <div class="capstone-slide">
+      <div class="slide-num">5</div>
+      <h4>Proof Points: What Changed</h4>
+      <p>The evidence — qualitative and quantitative — that rooted/pwr shifted practice, coordination, and credibility.</p>
+      <textarea placeholder="Share 3–5 specific proof points. Reference your Proof Points Log. Be concrete."></textarea>
+    </div>
+
+    <div class="capstone-slide">
+      <div class="slide-num">6</div>
+      <h4>The Hardest Moments</h4>
+      <p>What did not go as planned? What risks materialized? What pivots did you make?</p>
+      <textarea placeholder="Be honest. This is where the most learning lives. What would you do differently?"></textarea>
+    </div>
+
+    <div class="capstone-slide">
+      <div class="slide-num">7</div>
+      <h4>What Is Stronger Now</h4>
+      <p>Compared to July, what is the team's capacity, confidence, and shared practice like today?</p>
+      <textarea placeholder="Compare to your baseline. What domains grew most? What are you most proud of?"></textarea>
+    </div>
+
+    <div class="capstone-slide">
+      <div class="slide-num">8</div>
+      <h4>Sustainability Plan Summary</h4>
+      <p>Which routines, tools, and governance practices will you sustain after the fellowship ends?</p>
+      <textarea placeholder="Reference your Sustainability + Internalization Plan. What will you keep? What might fade?"></textarea>
+    </div>
+
+    <div class="capstone-slide">
+      <div class="slide-num">9</div>
+      <h4>Next-Step Commitments</h4>
+      <p>Three specific commitments your team is making for the 90 days after the fellowship closes.</p>
+      <textarea placeholder="Commitment 1: By [date], we will [action].&#10;Commitment 2: By [date], we will [action].&#10;Commitment 3: By [date], we will [action]."></textarea>
+    </div>
+
+    <div class="capstone-slide">
+      <div class="slide-num">10</div>
+      <h4>What We Need to Continue</h4>
+      <p>What support, resources, or connections would help your team sustain and scale what you've built?</p>
+      <textarea placeholder="Be specific about what would help you most in the next 6–12 months."></textarea>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>Final Reflection Survey</h3>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:12px">Complete individually before the final session.</p>
+    <div class="field-group"><label>What is the most significant practice change you made during the fellowship?</label><textarea></textarea></div>
+    <div class="field-group"><label>What skill do you feel most confident about now that you did not feel confident about in July?</label><textarea></textarea></div>
+    <div class="field-group"><label>What would you tell another organization leader considering this fellowship?</label><textarea></textarea></div>
+    <div class="field-group"><label>Rate your overall fellowship experience</label>
+      <div class="scale-btns">${[1,2,3,4,5].map(n=>`<button class="scale-btn" onclick="selectScale(this)">${n}</button>`).join('')}</div>
+    </div>
+    <div class="field-group" style="margin-top:10px"><label>What could PERC improve about the fellowship design or facilitation?</label><textarea></textarea></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+function showResource(id) {
+  document.querySelectorAll('.resource-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.rnav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0, 0);
+}
+function selectScale(btn) {
+  btn.closest('.scale-btns').querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+</script>
+</body>
+</html>

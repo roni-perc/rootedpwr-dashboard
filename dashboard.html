@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>rooted/pwr Fellowship Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #3B1F5E;
+    --purple-light: #6B4FA0;
+    --purple-pale: #EDE8F5;
+    --orange: #E8610A;
+    --orange-light: #F5A46B;
+    --orange-pale: #FDF0E8;
+    --cream: #F8F4EE;
+    --gray: #6B6B6B;
+    --gray-light: #F0EDE8;
+    --white: #FFFFFF;
+    --green: #2D7D46;
+    --green-pale: #E8F5ED;
+    --red: #C0392B;
+    --red-pale: #FDEAEA;
+    --yellow: #D4A017;
+    --yellow-pale: #FDF8E6;
+    --shadow: 0 2px 12px rgba(59,31,94,0.08);
+    --shadow-lg: 0 8px 32px rgba(59,31,94,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: #2A1A40;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ─── HEADER ─── */
+  .site-header {
+    background: var(--purple);
+    color: white;
+    padding: 20px 28px 16px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .site-header .logo { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .site-header .logo span { color: var(--orange-light); }
+  .site-header .subtitle { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+  .header-meta { text-align: right; font-size: 12px; color: rgba(255,255,255,0.65); }
+  .header-meta strong { color: white; display: block; font-size: 14px; margin-bottom: 2px; }
+
+  /* ─── NAV TABS ─── */
+  .nav-bar {
+    background: white;
+    border-bottom: 3px solid var(--orange);
+    display: flex;
+    overflow-x: auto;
+    gap: 0;
+    box-shadow: var(--shadow);
+  }
+  .nav-tab {
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray);
+    cursor: pointer;
+    border: none;
+    background: none;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .nav-tab:hover { color: var(--purple); background: var(--purple-pale); }
+  .nav-tab.active { color: var(--orange); font-weight: 600; border-bottom-color: var(--orange); }
+
+  /* ─── MAIN LAYOUT ─── */
+  .main { padding: 20px 24px; max-width: 1300px; margin: 0 auto; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ─── STAT CARDS ─── */
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .stat-card {
+    background: white;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    border-top: 4px solid var(--purple);
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card.orange { border-top-color: var(--orange); }
+  .stat-card.green { border-top-color: var(--green); }
+  .stat-card.yellow { border-top-color: var(--yellow); }
+  .stat-card .label { font-size: 11px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-card .value { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 700; color: var(--purple); line-height: 1.1; margin: 4px 0 2px; }
+  .stat-card.orange .value { color: var(--orange); }
+  .stat-card.green .value { color: var(--green); }
+  .stat-card.yellow .value { color: var(--yellow); }
+  .stat-card .sub { font-size: 11px; color: var(--gray); }
+
+  /* ─── SECTION TITLES ─── */
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--purple);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 2px; background: var(--orange); opacity: 0.3; }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .card-title { font-weight: 600; color: var(--purple); font-size: 14px; }
+
+  /* ─── TASK TABLE ─── */
+  .task-table { width: 100%; border-collapse: collapse; }
+  .task-table th {
+    background: var(--purple);
+    color: white;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .task-table th:first-child { border-radius: 6px 0 0 0; }
+  .task-table th:last-child { border-radius: 0 6px 0 0; }
+  .task-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--gray-light);
+    font-size: 13px;
+    vertical-align: middle;
+  }
+  .task-table tr:hover td { background: var(--purple-pale); }
+  .task-table tr.done td { opacity: 0.55; }
+  .task-table tr.done .task-name { text-decoration: line-through; }
+
+  .check-cell input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: var(--orange);
+    cursor: pointer;
+  }
+
+  /* ─── BADGES ─── */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .badge-done { background: var(--green-pale); color: var(--green); }
+  .badge-inprog { background: var(--yellow-pale); color: #9A7010; }
+  .badge-todo { background: var(--gray-light); color: var(--gray); }
+  .badge-alert { background: var(--red-pale); color: var(--red); }
+  .badge-phase1 { background: var(--purple-pale); color: var(--purple-light); }
+  .badge-phase2 { background: var(--orange-pale); color: var(--orange); }
+  .badge-phase3 { background: #E8F5ED; color: var(--green); }
+  .badge-phase4 { background: #FDF8E6; color: #9A7010; }
+  .badge-prelaunch { background: #F0EDE8; color: #555; }
+
+  /* ─── PROGRESS BAR ─── */
+  .progress-wrap { background: var(--gray-light); border-radius: 20px; height: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, var(--orange), var(--purple-light)); transition: width 0.4s; }
+
+  /* ─── GANTT ─── */
+  .gantt-wrap { overflow-x: auto; }
+  .gantt-table { border-collapse: collapse; min-width: 800px; width: 100%; }
+  .gantt-table td, .gantt-table th { padding: 5px 6px; font-size: 12px; }
+  .gantt-table .label-col { min-width: 180px; max-width: 200px; font-weight: 500; color: var(--purple); border-right: 2px solid var(--gray-light); }
+  .gantt-table .month-head { text-align: center; font-weight: 600; color: white; font-size: 11px; letter-spacing: 0.3px; }
+  .gantt-table tr:nth-child(even) .label-col { background: var(--cream); }
+  .gantt-bar {
+    height: 22px;
+    border-radius: 4px;
+    display: block;
+    position: relative;
+    min-width: 4px;
+  }
+  .gantt-bar.phase0 { background: linear-gradient(90deg, #888, #aaa); }
+  .gantt-bar.phase1 { background: linear-gradient(90deg, var(--purple), var(--purple-light)); }
+  .gantt-bar.phase2 { background: linear-gradient(90deg, var(--orange), var(--orange-light)); }
+  .gantt-bar.phase3 { background: linear-gradient(90deg, var(--green), #5DBE7C); }
+  .gantt-bar.phase4 { background: linear-gradient(90deg, var(--yellow), #E8C060); }
+  .gantt-cell { vertical-align: middle; }
+  .gantt-month-header { background: var(--purple); }
+
+  /* ─── CALENDAR ─── */
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .cal-day-header { text-align: center; font-size: 11px; font-weight: 600; color: var(--gray); padding: 4px 0; text-transform: uppercase; }
+  .cal-day {
+    min-height: 68px;
+    border-radius: 6px;
+    border: 1px solid var(--gray-light);
+    padding: 4px 6px;
+    background: white;
+    font-size: 11px;
+    position: relative;
+    vertical-align: top;
+  }
+  .cal-day.other-month { background: var(--cream); opacity: 0.5; }
+  .cal-day.today { border-color: var(--orange); border-width: 2px; }
+  .cal-day-num { font-weight: 700; font-size: 13px; color: var(--purple); margin-bottom: 2px; }
+  .cal-day.today .cal-day-num { background: var(--orange); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+  .cal-event {
+    background: var(--purple-pale);
+    color: var(--purple);
+    border-radius: 3px;
+    padding: 1px 4px;
+    margin-bottom: 2px;
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+  .cal-event.orange { background: var(--orange-pale); color: var(--orange); }
+  .cal-event.green { background: var(--green-pale); color: var(--green); }
+  .cal-event.red { background: var(--red-pale); color: var(--red); }
+  .cal-controls { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .cal-nav { background: none; border: 1px solid var(--gray-light); padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  .cal-nav:hover { background: var(--purple-pale); }
+  .cal-month-label { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; color: var(--purple); min-width: 160px; }
+
+  /* ─── UPCOMING ─── */
+  .upcoming-list { display: flex; flex-direction: column; gap: 8px; }
+  .upcoming-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: white;
+    border-radius: 8px;
+    padding: 10px 14px;
+    border-left: 4px solid var(--purple);
+    box-shadow: var(--shadow);
+  }
+  .upcoming-item.urgent { border-left-color: var(--red); background: var(--red-pale); }
+  .upcoming-item.soon { border-left-color: var(--yellow); background: var(--yellow-pale); }
+  .upcoming-item.normal { border-left-color: var(--purple); }
+  .upcoming-date { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--purple); min-width: 44px; text-align: center; line-height: 1; }
+  .upcoming-date small { display: block; font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--gray); margin-top: 2px; }
+  .upcoming-item.urgent .upcoming-date { color: var(--red); }
+  .upcoming-item.soon .upcoming-date { color: var(--yellow); }
+  .upcoming-title { font-weight: 600; font-size: 13px; color: var(--purple); }
+  .upcoming-meta { font-size: 11px; color: var(--gray); margin-top: 2px; }
+  .urgent-tag { display: inline-block; font-size: 10px; font-weight: 700; color: var(--red); background: var(--red-pale); border: 1px solid var(--red); padding: 1px 6px; border-radius: 10px; margin-left: 6px; }
+  .soon-tag { display: inline-block; font-size: 10px; font-weight: 700; color: #9A7010; background: var(--yellow-pale); border: 1px solid var(--yellow); padding: 1px 6px; border-radius: 10px; margin-left: 6px; }
+
+  /* ─── TIMELINE ─── */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before { content: ''; position: absolute; left: 12px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(180deg, var(--purple), var(--orange)); }
+  .timeline-item { position: relative; margin-bottom: 20px; }
+  .timeline-dot {
+    position: absolute;
+    left: -28px;
+    top: 4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--orange);
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px var(--orange);
+    z-index: 1;
+  }
+  .timeline-dot.purple { background: var(--purple); box-shadow: 0 0 0 2px var(--purple); }
+  .timeline-dot.green { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+  .timeline-dot.yellow { background: var(--yellow); box-shadow: 0 0 0 2px var(--yellow); }
+  .timeline-date { font-size: 11px; font-weight: 600; color: var(--orange); text-transform: uppercase; letter-spacing: 0.5px; }
+  .timeline-title { font-weight: 600; font-size: 14px; color: var(--purple); margin: 2px 0; }
+  .timeline-desc { font-size: 12px; color: var(--gray); }
+
+  /* ─── TWO-COL LAYOUT ─── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media (max-width: 800px) { .two-col, .three-col { grid-template-columns: 1fr; } }
+
+  /* ─── PHASE PILLS ─── */
+  .phase-indicator {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .phase-pill {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 2px solid transparent;
+  }
+  .phase-pill.active { border-color: currentColor; }
+  .phase-pill.pre { background: #E8E4F0; color: #555; }
+  .phase-pill.p1 { background: var(--purple-pale); color: var(--purple-light); }
+  .phase-pill.p2 { background: var(--orange-pale); color: var(--orange); }
+  .phase-pill.p3 { background: var(--green-pale); color: var(--green); }
+  .phase-pill.p4 { background: var(--yellow-pale); color: #9A7010; }
+
+  /* ─── EDIT MODAL ─── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; display: none;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: white; border-radius: 12px; padding: 28px;
+    max-width: 520px; width: 90%; max-height: 80vh; overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+  }
+  .modal h3 { font-family: 'Fraunces', serif; color: var(--purple); margin-bottom: 16px; font-size: 18px; }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--gray); margin-bottom: 4px; text-transform: uppercase; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; color: #333;
+  }
+  .form-group textarea { height: 70px; resize: vertical; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+  .btn { padding: 8px 18px; border-radius: 6px; border: none; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .btn-primary { background: var(--orange); color: white; }
+  .btn-primary:hover { background: #C54A00; }
+  .btn-ghost { background: none; border: 1px solid #ddd; color: var(--gray); }
+  .btn-ghost:hover { background: var(--gray-light); }
+
+  .info-bar {
+    background: var(--purple-pale);
+    border: 1px solid var(--purple-light);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--purple);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .info-bar span { font-size: 16px; }
+
+  .add-btn {
+    background: none;
+    border: 2px dashed var(--orange);
+    color: var(--orange);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    margin-top: 8px;
+  }
+  .add-btn:hover { background: var(--orange-pale); }
+
+  .search-bar {
+    display: flex; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap;
+  }
+  .search-bar input {
+    padding: 7px 12px; border: 1px solid #ddd; border-radius: 6px;
+    font-size: 13px; flex: 1; min-width: 160px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .search-bar select {
+    padding: 7px 10px; border: 1px solid #ddd; border-radius: 6px;
+    font-size: 13px; font-family: 'DM Sans', sans-serif;
+  }
+
+  .del-btn {
+    background: none; border: none; color: #ccc; cursor: pointer; font-size: 16px; padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .del-btn:hover { color: var(--red); background: var(--red-pale); }
+
+  .edit-btn {
+    background: none; border: none; color: var(--gray); cursor: pointer; font-size: 14px; padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .edit-btn:hover { color: var(--purple); background: var(--purple-pale); }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="site-header">
+  <div>
+    <div class="logo">rooted<span>/pwr</span></div>
+    <div class="subtitle">Project Management + Strategic Implementation Fellowship · 2026 Pilot</div>
+  </div>
+  <div class="header-meta">
+    <strong id="today-date"></strong>
+    <span id="fellowship-status"></span>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-bar">
+  <button class="nav-tab active" onclick="showTab('overview')">📊 At-a-Glance</button>
+  <button class="nav-tab" onclick="showTab('tasks')">✅ Task Tracker</button>
+  <button class="nav-tab" onclick="showTab('upcoming')">🔔 Upcoming</button>
+  <button class="nav-tab" onclick="showTab('calendar')">📅 Calendar</button>
+  <button class="nav-tab" onclick="showTab('gantt')">📈 Gantt</button>
+  <button class="nav-tab" onclick="showTab('timeline')">🗓 Timeline</button>
+</div>
+
+<div class="main">
+
+<!-- ══════════════════════════════════════════ -->
+<!-- TAB: OVERVIEW / AT-A-GLANCE               -->
+<!-- ══════════════════════════════════════════ -->
+<div id="tab-overview" class="tab-panel active">
+
+  <div class="phase-indicator" id="phase-pills"></div>
+
+  <!-- Stat Cards -->
+  <div class="stat-row" id="stat-row"></div>
+
+  <div class="two-col">
+    <!-- Tasks by Phase -->
+    <div>
+      <div class="section-title">Progress by Phase</div>
+      <div class="card" id="phase-progress-card"></div>
+    </div>
+
+    <!-- Upcoming 2-week snapshot -->
+    <div>
+      <div class="section-title">Next 14 Days</div>
+      <div class="upcoming-list" id="upcoming-mini"></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-top:16px">Fellowship Milestones</div>
+  <div class="card">
+    <div class="timeline" id="milestones-timeline"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- TAB: TASK TRACKER                         -->
+<!-- ══════════════════════════════════════════ -->
+<div id="tab-tasks" class="tab-panel">
+  <div class="info-bar"><span>ℹ️</span> Changes are saved automatically in your browser. To connect to a Google Sheet backend, paste your published CSV URL below and click Sync.</div>
+
+  <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
+    <input id="sheet-url" type="text" placeholder="Google Sheets CSV URL (optional)" style="flex:1;min-width:200px;padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;">
+    <button class="btn btn-ghost" onclick="syncFromSheet()">↻ Sync Sheet</button>
+    <button class="btn btn-primary" onclick="openAddTask()">+ Add Task</button>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="task-search" placeholder="Search tasks…" oninput="renderTasks()">
+    <select id="task-filter-phase" onchange="renderTasks()">
+      <option value="">All Phases</option>
+      <option value="Pre-Launch">Pre-Launch</option>
+      <option value="Phase 1">Phase 1</option>
+      <option value="Phase 2">Phase 2</option>
+      <option value="Phase 3">Phase 3</option>
+      <option value="Phase 4">Phase 4</option>
+    </select>
+    <select id="task-filter-status" onchange="renderTasks()">
+      <option value="">All Statuses</option>
+      <option value="To Do">To Do</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Done">Done</option>
+    </select>
+    <select id="task-filter-owner" onchange="renderTasks()">
+      <option value="">All Owners</option>
+    </select>
+  </div>
+
+  <div class="card" style="padding:0;overflow:hidden;">
+    <table class="task-table">
+      <thead>
+        <tr>
+          <th style="width:36px"></th>
+          <th>Task</th>
+          <th>Phase</th>
+          <th>Owner</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th>Notes</th>
+          <th style="width:70px"></th>
+        </tr>
+      </thead>
+      <tbody id="task-tbody"></tbody>
+    </table>
+  </div>
+
+  <div style="text-align:center;margin-top:8px;">
+    <button class="add-btn" onclick="openAddTask()">+ Add New Task</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- TAB: UPCOMING                             -->
+<!-- ══════════════════════════════════════════ -->
+<div id="tab-upcoming" class="tab-panel">
+  <div class="two-col">
+    <div>
+      <div class="section-title">🚨 Due in Next 3 Days</div>
+      <div class="upcoming-list" id="urgent-list"></div>
+    </div>
+    <div>
+      <div class="section-title">📅 Coming Up (Next 14 Days)</div>
+      <div class="upcoming-list" id="soon-list"></div>
+    </div>
+  </div>
+  <div style="margin-top:20px;">
+    <div class="section-title">All Upcoming Events & Deadlines</div>
+    <div class="upcoming-list" id="all-upcoming-list"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- TAB: CALENDAR                             -->
+<!-- ══════════════════════════════════════════ -->
+<div id="tab-calendar" class="tab-panel">
+  <div class="card">
+    <div class="cal-controls">
+      <button class="cal-nav" onclick="calPrev()">‹</button>
+      <div class="cal-month-label" id="cal-month-label"></div>
+      <button class="cal-nav" onclick="calNext()">›</button>
+      <div style="flex:1"></div>
+      <select onchange="calJump(this.value)" id="cal-jump" style="padding:5px 8px;border:1px solid #ddd;border-radius:6px;font-size:12px;">
+        <option value="3">April 2026</option>
+        <option value="4">May 2026</option>
+        <option value="5">June 2026</option>
+        <option value="6">July 2026</option>
+        <option value="7">August 2026</option>
+        <option value="8">September 2026</option>
+        <option value="9">October 2026</option>
+        <option value="10">November 2026</option>
+        <option value="11">December 2026</option>
+      </select>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+  <div style="margin-top:8px;font-size:11px;color:var(--gray);display:flex;gap:12px;flex-wrap:wrap;">
+    <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:2px;background:var(--purple-pale);display:inline-block;border:1px solid var(--purple-light)"></span> Session / Virtual</span>
+    <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:2px;background:var(--orange-pale);display:inline-block;border:1px solid var(--orange)"></span> Deadline</span>
+    <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:2px;background:var(--green-pale);display:inline-block;border:1px solid var(--green)"></span> Convening / In-Person</span>
+    <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:2px;background:var(--red-pale);display:inline-block;border:1px solid var(--red)"></span> Alert / Urgent</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- TAB: GANTT                                -->
+<!-- ══════════════════════════════════════════ -->
+<div id="tab-gantt" class="tab-panel">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Fellowship Gantt Chart — April–December 2026</div>
+    </div>
+    <div class="gantt-wrap">
+      <table class="gantt-table" id="gantt-table"></table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- TAB: TIMELINE                             -->
+<!-- ══════════════════════════════════════════ -->
+<div id="tab-timeline" class="tab-panel">
+  <div class="two-col">
+    <div>
+      <div class="section-title">Application & Selection</div>
+      <div class="card"><div class="timeline" id="tl-prelaunch"></div></div>
+    </div>
+    <div>
+      <div class="section-title">Fellowship Phases</div>
+      <div class="card"><div class="timeline" id="tl-phases"></div></div>
+    </div>
+  </div>
+  <div class="section-title">Session-by-Session</div>
+  <div class="card"><div class="timeline" id="tl-sessions"></div></div>
+</div>
+
+</div><!-- /main -->
+
+<!-- ADD/EDIT TASK MODAL -->
+<div class="modal-overlay" id="task-modal">
+  <div class="modal">
+    <h3 id="modal-title">Add Task</h3>
+    <div class="form-group">
+      <label>Task Name</label>
+      <input type="text" id="t-name" placeholder="e.g. Send fellowship welcome packet">
+    </div>
+    <div class="form-group">
+      <label>Phase</label>
+      <select id="t-phase">
+        <option>Pre-Launch</option>
+        <option>Phase 1</option>
+        <option>Phase 2</option>
+        <option>Phase 3</option>
+        <option>Phase 4</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Owner</label>
+      <input type="text" id="t-owner" placeholder="e.g. Deidre Thomas">
+    </div>
+    <div class="form-group">
+      <label>Due Date</label>
+      <input type="date" id="t-due">
+    </div>
+    <div class="form-group">
+      <label>Status</label>
+      <select id="t-status">
+        <option>To Do</option>
+        <option>In Progress</option>
+        <option>Done</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <textarea id="t-notes" placeholder="Optional notes…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTask()">Save Task</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+
+const FELLOWSHIP_EVENTS = [
+  // PRE-LAUNCH
+  { date: "2026-04-01", title: "Fellowship Application Opens", type: "deadline", phase: "Pre-Launch" },
+  { date: "2026-04-07", title: "Informational Webinar", type: "session", phase: "Pre-Launch" },
+  { date: "2026-04-30", title: "Fellowship Application Closes", type: "deadline", phase: "Pre-Launch" },
+  { date: "2026-05-15", title: "Application Review + Status Notifications", type: "deadline", phase: "Pre-Launch" },
+  { date: "2026-05-29", title: "Fellowship Finalist Interviews End", type: "deadline", phase: "Pre-Launch" },
+  { date: "2026-06-05", title: "Fellowship Awardees Notified + Agreements Signed", type: "deadline", phase: "Pre-Launch" },
+  { date: "2026-06-18", title: "Pre-Launch Office Hours (Virtual, 2hr)", type: "session", phase: "Pre-Launch" },
+  { date: "2026-06-23", title: "Baseline Diagnostic + Case Framing (Virtual, 2hr)", type: "session", phase: "Pre-Launch" },
+  // PHASE 1
+  { date: "2026-07-01", title: "Virtual Fellowship Launch", type: "session", phase: "Phase 1" },
+  { date: "2026-07-07", title: "Session 1 – Cohort Launch (Virtual, 2hr)", type: "session", phase: "Phase 1" },
+  { date: "2026-07-07", title: "Initiative Profile v1 DUE", type: "deadline", phase: "Phase 1" },
+  { date: "2026-07-16", title: "Session 2 – Power, Roles, and Shared Ownership (Virtual, 2hr)", type: "session", phase: "Phase 1" },
+  { date: "2026-07-28", title: "Session 3 – Strategy Clarity and Catalytic Capital (Virtual, 2hr)", type: "session", phase: "Phase 1" },
+  { date: "2026-07-28", title: "Strategy Clarity Brief DUE (48hr before lab)", type: "deadline", phase: "Phase 1" },
+  { date: "2026-07-30", title: "Applied Lab 1 (Virtual, 1.5hr)", type: "session", phase: "Phase 1" },
+  // PHASE 2
+  { date: "2026-08-06", title: "Session 4 – Scope, Outcomes, and Accountability (Virtual, 2hr)", type: "session", phase: "Phase 2" },
+  { date: "2026-08-18", title: "Session 5 – Sequencing, Dependencies, Work Planning (Virtual, 2hr)", type: "session", phase: "Phase 2" },
+  { date: "2026-08-27", title: "Session 6 – Collaborative Tables and Stakeholder Alignment (Virtual, 2hr)", type: "session", phase: "Phase 2" },
+  { date: "2026-09-01", title: "Draft Work Plan + Collab Table Memo DUE (pre-lab)", type: "deadline", phase: "Phase 2" },
+  { date: "2026-09-03", title: "Applied Lab 2 – Baltimore Prep (Virtual, 1.5hr)", type: "session", phase: "Phase 2" },
+  // PHASE 3
+  { date: "2026-09-15", title: "Convening Day 1 – Grounding in Place (Baltimore, PM)", type: "convening", phase: "Phase 3" },
+  { date: "2026-09-16", title: "Convening Day 2 – Intensive Practice (Baltimore, Full Day)", type: "convening", phase: "Phase 3" },
+  { date: "2026-09-17", title: "Convening Day 3 – Forward Planning (Baltimore, Half Day)", type: "convening", phase: "Phase 3" },
+  // PHASE 4
+  { date: "2026-10-06", title: "Session 7 – Risk, Adaptation, and Escalation (Virtual, 2hr)", type: "session", phase: "Phase 4" },
+  { date: "2026-10-22", title: "Session 8 – Measurement, Monitoring, and Meaning-Making (Virtual, 2hr)", type: "session", phase: "Phase 4" },
+  { date: "2026-11-05", title: "Session 9 – Sustainability and Internalization (Virtual, 2hr)", type: "session", phase: "Phase 4" },
+  { date: "2026-11-17", title: "Capstone Materials + Proof Points Log DUE", type: "deadline", phase: "Phase 4" },
+  { date: "2026-11-19", title: "Session 10 – Capstone Reflection and Proof Points (Virtual, 2hr)", type: "session", phase: "Phase 4" },
+  { date: "2026-12-10", title: "Optional Post-Program Close-Out Checkpoint (Virtual, 1.5hr)", type: "session", phase: "Phase 4" },
+];
+
+const DEFAULT_TASKS = [
+  { id: 1, name: "Publish fellowship application on website", phase: "Pre-Launch", owner: "Deidre Thomas", due: "2026-04-01", status: "To Do", notes: "Include all application guidelines and FAQ" },
+  { id: 2, name: "Host informational webinar", phase: "Pre-Launch", owner: "Deidre Thomas", due: "2026-04-07", status: "To Do", notes: "" },
+  { id: 3, name: "Review all submitted applications", phase: "Pre-Launch", owner: "PERC Team", due: "2026-05-15", status: "To Do", notes: "Score for alignment, urgency, capacity" },
+  { id: 4, name: "Conduct finalist interviews", phase: "Pre-Launch", owner: "Deidre Thomas", due: "2026-05-29", status: "To Do", notes: "" },
+  { id: 5, name: "Notify awardees and sign grant agreements", phase: "Pre-Launch", owner: "PERC Team", due: "2026-06-05", status: "To Do", notes: "" },
+  { id: 6, name: "Send welcome packet to accepted teams", phase: "Pre-Launch", owner: "Deidre Thomas", due: "2026-06-12", status: "To Do", notes: "" },
+  { id: 7, name: "Set up Google Site and share access", phase: "Pre-Launch", owner: "PERC Team", due: "2026-06-15", status: "To Do", notes: "" },
+  { id: 8, name: "Distribute baseline diagnostic to all teams", phase: "Pre-Launch", owner: "Deidre Thomas", due: "2026-06-18", status: "To Do", notes: "" },
+  { id: 9, name: "Facilitate Pre-Launch Office Hours session", phase: "Pre-Launch", owner: "Deidre Thomas", due: "2026-06-18", status: "To Do", notes: "" },
+  { id: 10, name: "Facilitate Baseline Diagnostic + Case Framing session", phase: "Pre-Launch", owner: "Deidre Thomas", due: "2026-06-23", status: "To Do", notes: "" },
+  { id: 11, name: "Prepare and distribute Session 1 materials", phase: "Phase 1", owner: "PERC Team", due: "2026-07-03", status: "To Do", notes: "" },
+  { id: 12, name: "Facilitate Session 1 – Cohort Launch", phase: "Phase 1", owner: "Deidre Thomas", due: "2026-07-07", status: "To Do", notes: "" },
+  { id: 13, name: "Collect Initiative Profile v1 from all teams", phase: "Phase 1", owner: "PERC Team", due: "2026-07-14", status: "To Do", notes: "" },
+  { id: 14, name: "Facilitate Session 2 – Power, Roles, and Shared Ownership", phase: "Phase 1", owner: "Deidre Thomas", due: "2026-07-16", status: "To Do", notes: "" },
+  { id: 15, name: "Facilitate Session 3 – Strategy Clarity and Catalytic Capital", phase: "Phase 1", owner: "Deidre Thomas", due: "2026-07-28", status: "To Do", notes: "" },
+  { id: 16, name: "Facilitate Applied Lab 1", phase: "Phase 1", owner: "Deidre Thomas", due: "2026-07-30", status: "To Do", notes: "" },
+  { id: 17, name: "Facilitate Session 4 – Scope, Outcomes, and Accountability", phase: "Phase 2", owner: "Deidre Thomas", due: "2026-08-06", status: "To Do", notes: "" },
+  { id: 18, name: "Facilitate Session 5 – Sequencing, Dependencies, Work Planning", phase: "Phase 2", owner: "Deidre Thomas", due: "2026-08-18", status: "To Do", notes: "" },
+  { id: 19, name: "Facilitate Session 6 – Collaborative Tables and Stakeholder Alignment", phase: "Phase 2", owner: "Deidre Thomas", due: "2026-08-27", status: "To Do", notes: "" },
+  { id: 20, name: "Facilitate Applied Lab 2 – Baltimore Prep", phase: "Phase 2", owner: "Deidre Thomas", due: "2026-09-03", status: "To Do", notes: "" },
+  { id: 21, name: "Finalize Baltimore convening logistics and venue", phase: "Phase 3", owner: "PERC Team", due: "2026-08-31", status: "To Do", notes: "Confirm catering, AV, hotel rooms" },
+  { id: 22, name: "Facilitate Convening Day 1 – Grounding in Place", phase: "Phase 3", owner: "Deidre Thomas", due: "2026-09-15", status: "To Do", notes: "Baltimore" },
+  { id: 23, name: "Facilitate Convening Day 2 – Intensive Practice", phase: "Phase 3", owner: "Deidre Thomas", due: "2026-09-16", status: "To Do", notes: "" },
+  { id: 24, name: "Facilitate Convening Day 3 – Forward Planning", phase: "Phase 3", owner: "Deidre Thomas", due: "2026-09-17", status: "To Do", notes: "" },
+  { id: 25, name: "Facilitate Session 7 – Risk, Adaptation, and Escalation", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-10-06", status: "To Do", notes: "" },
+  { id: 26, name: "Facilitate Session 8 – Measurement, Monitoring, and Meaning-Making", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-10-22", status: "To Do", notes: "" },
+  { id: 27, name: "Facilitate Session 9 – Sustainability and Internalization", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-11-05", status: "To Do", notes: "" },
+  { id: 28, name: "Collect capstone decks and proof points logs from all teams", phase: "Phase 4", owner: "PERC Team", due: "2026-11-17", status: "To Do", notes: "" },
+  { id: 29, name: "Facilitate Session 10 – Capstone Reflection and Proof Points", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-11-19", status: "To Do", notes: "" },
+  { id: 30, name: "Optional Post-Program Close-Out Checkpoint", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-12-10", status: "To Do", notes: "" },
+];
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let tasks = JSON.parse(localStorage.getItem('rp_tasks') || 'null') || DEFAULT_TASKS;
+let editingId = null;
+let calYear = 2026;
+let calMonth = 3; // April (0-indexed)
+
+function saveTasks() { localStorage.setItem('rp_tasks', JSON.stringify(tasks)); }
+
+// ═══════════════════════════════════════════
+// TAB NAVIGATION
+// ═══════════════════════════════════════════
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'calendar') renderCalendar();
+  if (id === 'gantt') renderGantt();
+  if (id === 'tasks') renderTasks();
+  if (id === 'upcoming') renderUpcoming();
+  if (id === 'timeline') renderTimeline();
+}
+
+// ═══════════════════════════════════════════
+// DATE HELPERS
+// ═══════════════════════════════════════════
+function today() { return new Date(); }
+function toDate(s) { return new Date(s + 'T00:00:00'); }
+function diffDays(a, b) { return Math.round((a - b) / 86400000); }
+function fmtDate(s) {
+  const d = toDate(s);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+function fmtDateShort(s) {
+  const d = toDate(s);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+// ═══════════════════════════════════════════
+// OVERVIEW TAB
+// ═══════════════════════════════════════════
+function renderOverview() {
+  // Phase pills
+  const phases = ["Pre-Launch", "Phase 1", "Phase 2", "Phase 3", "Phase 4"];
+  const phaseClasses = { "Pre-Launch": "pre", "Phase 1": "p1", "Phase 2": "p2", "Phase 3": "p3", "Phase 4": "p4" };
+  const now = today();
+  let currentPhase = "Pre-Launch";
+  if (now >= toDate("2026-07-01") && now < toDate("2026-08-01")) currentPhase = "Phase 1";
+  else if (now >= toDate("2026-08-01") && now < toDate("2026-09-14")) currentPhase = "Phase 2";
+  else if (now >= toDate("2026-09-14") && now < toDate("2026-10-01")) currentPhase = "Phase 3";
+  else if (now >= toDate("2026-10-01")) currentPhase = "Phase 4";
+
+  document.getElementById('phase-pills').innerHTML = phases.map(p =>
+    `<div class="phase-pill ${phaseClasses[p]} ${p === currentPhase ? 'active' : ''}">${p}</div>`
+  ).join('');
+
+  // Stats
+  const total = tasks.length;
+  const done = tasks.filter(t => t.status === 'Done').length;
+  const inprog = tasks.filter(t => t.status === 'In Progress').length;
+  const overdue = tasks.filter(t => t.status !== 'Done' && t.due && toDate(t.due) < now).length;
+
+  document.getElementById('stat-row').innerHTML = `
+    <div class="stat-card"><div class="label">Total Tasks</div><div class="value">${total}</div><div class="sub">across all phases</div></div>
+    <div class="stat-card green"><div class="label">Completed</div><div class="value">${done}</div><div class="sub">${Math.round(done/total*100) || 0}% done</div></div>
+    <div class="stat-card orange"><div class="label">In Progress</div><div class="value">${inprog}</div><div class="sub">active tasks</div></div>
+    <div class="stat-card yellow"><div class="label">Overdue</div><div class="value">${overdue}</div><div class="sub">need attention</div></div>
+    <div class="stat-card"><div class="label">Fellowship Days</div><div class="value">${Math.max(0, diffDays(toDate("2026-07-07"), now))}</div><div class="sub">until launch</div></div>
+  `;
+
+  // Phase progress
+  let phaseHTML = '';
+  phases.forEach(ph => {
+    const pts = tasks.filter(t => t.phase === ph);
+    const doneP = pts.filter(t => t.status === 'Done').length;
+    const pct = pts.length ? Math.round(doneP / pts.length * 100) : 0;
+    phaseHTML += `
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-weight:600;font-size:13px;color:var(--purple)">${ph}</span>
+          <span style="font-size:12px;color:var(--gray)">${doneP}/${pts.length} · ${pct}%</span>
+        </div>
+        <div class="progress-wrap"><div class="progress-fill" style="width:${pct}%"></div></div>
+      </div>`;
+  });
+  document.getElementById('phase-progress-card').innerHTML = phaseHTML || '<div style="color:var(--gray);font-size:13px">No tasks yet.</div>';
+
+  // Upcoming mini
+  const upcoming = FELLOWSHIP_EVENTS.filter(e => {
+    const d = toDate(e.date);
+    const diff = diffDays(d, now);
+    return diff >= 0 && diff <= 14;
+  }).sort((a,b) => a.date.localeCompare(b.date)).slice(0, 5);
+
+  document.getElementById('upcoming-mini').innerHTML = upcoming.map(e => {
+    const diff = diffDays(toDate(e.date), now);
+    const cls = diff <= 3 ? 'urgent' : diff <= 7 ? 'soon' : 'normal';
+    const d = toDate(e.date);
+    return `<div class="upcoming-item ${cls}">
+      <div class="upcoming-date">${d.getDate()}<small>${d.toLocaleDateString('en-US',{month:'short'})}</small></div>
+      <div><div class="upcoming-title">${e.title}${diff <= 3 ? '<span class="urgent-tag">SOON</span>' : ''}</div>
+      <div class="upcoming-meta">${e.phase}</div></div>
+    </div>`;
+  }).join('') || '<div style="color:var(--gray);font-size:13px;padding:12px">No events in the next 14 days.</div>';
+
+  // Milestones timeline
+  const milestones = [
+    { date: "2026-04-01", title: "Application Opens", desc: "Fellowship recruitment begins", color: "purple" },
+    { date: "2026-06-05", title: "Awardees Notified", desc: "Cohort finalized, grant agreements signed", color: "orange" },
+    { date: "2026-07-07", title: "Fellowship Launches", desc: "Virtual Phase 1 begins", color: "orange" },
+    { date: "2026-09-15", title: "Baltimore Convening", desc: "Three-day in-person intensive", color: "green" },
+    { date: "2026-11-19", title: "Capstone + Closing", desc: "Final session and proof points celebration", color: "purple" },
+    { date: "2026-12-10", title: "Post-Program Follow-Up", desc: "Optional close-out checkpoint", color: "yellow" },
+  ];
+  document.getElementById('milestones-timeline').innerHTML = milestones.map(m => `
+    <div class="timeline-item">
+      <div class="timeline-dot ${m.color}"></div>
+      <div class="timeline-date">${fmtDateShort(m.date)}</div>
+      <div class="timeline-title">${m.title}</div>
+      <div class="timeline-desc">${m.desc}</div>
+    </div>
+  `).join('');
+
+  // Header date
+  document.getElementById('today-date').textContent = now.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  document.getElementById('fellowship-status').textContent = 'Current Phase: ' + currentPhase;
+}
+
+// ═══════════════════════════════════════════
+// TASK TRACKER
+// ═══════════════════════════════════════════
+function renderTasks() {
+  const search = (document.getElementById('task-search')?.value || '').toLowerCase();
+  const filterPhase = document.getElementById('task-filter-phase')?.value || '';
+  const filterStatus = document.getElementById('task-filter-status')?.value || '';
+  const filterOwner = document.getElementById('task-filter-owner')?.value || '';
+
+  // Populate owner filter
+  const owners = [...new Set(tasks.map(t => t.owner).filter(Boolean))];
+  const ownerSelect = document.getElementById('task-filter-owner');
+  if (ownerSelect) {
+    const curVal = ownerSelect.value;
+    ownerSelect.innerHTML = '<option value="">All Owners</option>' + owners.map(o => `<option ${o===curVal?'selected':''}>${o}</option>`).join('');
+  }
+
+  const filtered = tasks.filter(t => {
+    if (filterPhase && t.phase !== filterPhase) return false;
+    if (filterStatus && t.status !== filterStatus) return false;
+    if (filterOwner && t.owner !== filterOwner) return false;
+    if (search && !t.name.toLowerCase().includes(search) && !t.notes?.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  const phaseClass = { "Pre-Launch": "badge-prelaunch", "Phase 1": "badge-phase1", "Phase 2": "badge-phase2", "Phase 3": "badge-phase3", "Phase 4": "badge-phase4" };
+  const statusClass = { "Done": "badge-done", "In Progress": "badge-inprog", "To Do": "badge-todo" };
+  const now = today();
+
+  document.getElementById('task-tbody').innerHTML = filtered.map(t => {
+    const isDone = t.status === 'Done';
+    const isOverdue = !isDone && t.due && toDate(t.due) < now;
+    return `<tr class="${isDone ? 'done' : ''}" id="task-row-${t.id}">
+      <td class="check-cell"><input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleTask(${t.id})"></td>
+      <td class="task-name">${t.name}</td>
+      <td><span class="badge ${phaseClass[t.phase] || 'badge-todo'}">${t.phase}</span></td>
+      <td>${t.owner || '—'}</td>
+      <td style="white-space:nowrap;${isOverdue ? 'color:var(--red);font-weight:600' : ''}">${t.due ? fmtDateShort(t.due) : '—'}${isOverdue ? ' ⚠️' : ''}</td>
+      <td><span class="badge ${statusClass[t.status] || 'badge-todo'}">${t.status}</span></td>
+      <td style="color:var(--gray);font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.notes || ''}</td>
+      <td style="white-space:nowrap">
+        <button class="edit-btn" onclick="openEditTask(${t.id})">✏️</button>
+        <button class="del-btn" onclick="deleteTask(${t.id})">🗑</button>
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--gray)">No tasks match your filters.</td></tr>';
+}
+
+function toggleTask(id) {
+  const t = tasks.find(t => t.id === id);
+  if (!t) return;
+  t.status = t.status === 'Done' ? 'To Do' : 'Done';
+  saveTasks();
+  renderTasks();
+  renderOverview();
+}
+
+function deleteTask(id) {
+  if (!confirm('Delete this task?')) return;
+  tasks = tasks.filter(t => t.id !== id);
+  saveTasks();
+  renderTasks();
+  renderOverview();
+}
+
+function openAddTask() {
+  editingId = null;
+  document.getElementById('modal-title').textContent = 'Add Task';
+  document.getElementById('t-name').value = '';
+  document.getElementById('t-phase').value = 'Pre-Launch';
+  document.getElementById('t-owner').value = '';
+  document.getElementById('t-due').value = '';
+  document.getElementById('t-status').value = 'To Do';
+  document.getElementById('t-notes').value = '';
+  document.getElementById('task-modal').classList.add('open');
+}
+
+function openEditTask(id) {
+  editingId = id;
+  const t = tasks.find(t => t.id === id);
+  if (!t) return;
+  document.getElementById('modal-title').textContent = 'Edit Task';
+  document.getElementById('t-name').value = t.name;
+  document.getElementById('t-phase').value = t.phase;
+  document.getElementById('t-owner').value = t.owner || '';
+  document.getElementById('t-due').value = t.due || '';
+  document.getElementById('t-status').value = t.status;
+  document.getElementById('t-notes').value = t.notes || '';
+  document.getElementById('task-modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('task-modal').classList.remove('open'); }
+
+function saveTask() {
+  const name = document.getElementById('t-name').value.trim();
+  if (!name) { alert('Task name is required.'); return; }
+  const taskData = {
+    name,
+    phase: document.getElementById('t-phase').value,
+    owner: document.getElementById('t-owner').value.trim(),
+    due: document.getElementById('t-due').value,
+    status: document.getElementById('t-status').value,
+    notes: document.getElementById('t-notes').value.trim(),
+  };
+  if (editingId) {
+    const idx = tasks.findIndex(t => t.id === editingId);
+    tasks[idx] = { ...tasks[idx], ...taskData };
+  } else {
+    const maxId = tasks.reduce((m, t) => Math.max(m, t.id), 0);
+    tasks.push({ id: maxId + 1, ...taskData });
+  }
+  saveTasks();
+  closeModal();
+  renderTasks();
+  renderOverview();
+}
+
+async function syncFromSheet() {
+  const url = document.getElementById('sheet-url').value.trim();
+  if (!url) return;
+  try {
+    const res = await fetch(url);
+    const text = await res.text();
+    const rows = text.trim().split('\n').map(r => r.split(','));
+    const headers = rows[0].map(h => h.trim().toLowerCase().replace(/\s+/g, '_'));
+    const imported = rows.slice(1).map((row, i) => {
+      const obj = { id: Date.now() + i };
+      headers.forEach((h, j) => obj[h] = row[j]?.trim() || '');
+      return { id: obj.id, name: obj.task_name || obj.name || '', phase: obj.phase || '', owner: obj.owner || '', due: obj.due_date || obj.due || '', status: obj.status || 'To Do', notes: obj.notes || '' };
+    }).filter(t => t.name);
+    if (imported.length && confirm(`Import ${imported.length} tasks from sheet? This will replace current tasks.`)) {
+      tasks = imported;
+      saveTasks();
+      renderTasks();
+      renderOverview();
+      alert('Import successful!');
+    }
+  } catch (e) { alert('Could not load from that URL. Make sure it is a published CSV.'); }
+}
+
+// ═══════════════════════════════════════════
+// UPCOMING TAB
+// ═══════════════════════════════════════════
+function renderUpcoming() {
+  const now = today();
+
+  // Combine events and task deadlines
+  const allItems = [
+    ...FELLOWSHIP_EVENTS.map(e => ({ ...e, itemType: 'event' })),
+    ...tasks.filter(t => t.due && t.status !== 'Done').map(t => ({
+      date: t.due, title: t.name + ' (Task Due)', type: 'deadline', phase: t.phase, itemType: 'task'
+    }))
+  ].filter(e => toDate(e.date) >= now).sort((a,b) => a.date.localeCompare(b.date));
+
+  const urgent = allItems.filter(e => diffDays(toDate(e.date), now) <= 3);
+  const soon = allItems.filter(e => { const d = diffDays(toDate(e.date), now); return d > 3 && d <= 14; });
+
+  function itemHTML(e) {
+    const diff = diffDays(toDate(e.date), now);
+    const cls = diff <= 3 ? 'urgent' : diff <= 7 ? 'soon' : 'normal';
+    const d = toDate(e.date);
+    const tag = diff <= 3 ? '<span class="urgent-tag">⚡ 3 DAYS</span>' : diff <= 7 ? '<span class="soon-tag">↑ THIS WEEK</span>' : '';
+    const typeIcon = e.type === 'convening' ? '🏛' : e.type === 'session' ? '💻' : '📋';
+    return `<div class="upcoming-item ${cls}">
+      <div class="upcoming-date">${d.getDate()}<small>${d.toLocaleDateString('en-US',{month:'short'})}</small></div>
+      <div style="flex:1">
+        <div class="upcoming-title">${typeIcon} ${e.title} ${tag}</div>
+        <div class="upcoming-meta">${e.phase} · ${diff === 0 ? 'Today!' : diff === 1 ? 'Tomorrow' : 'In ' + diff + ' days'}</div>
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('urgent-list').innerHTML = urgent.map(itemHTML).join('') ||
+    '<div style="color:var(--green);font-size:13px;padding:12px;background:var(--green-pale);border-radius:8px">✅ Nothing urgent in the next 3 days.</div>';
+  document.getElementById('soon-list').innerHTML = soon.map(itemHTML).join('') ||
+    '<div style="color:var(--gray);font-size:13px;padding:12px">No upcoming items in the next 2 weeks.</div>';
+
+  const all14 = allItems.filter(e => diffDays(toDate(e.date), now) <= 30);
+  document.getElementById('all-upcoming-list').innerHTML = all14.map(itemHTML).join('') || '<div style="color:var(--gray);font-size:13px;">No events in the next 30 days.</div>';
+}
+
+// ═══════════════════════════════════════════
+// CALENDAR
+// ═══════════════════════════════════════════
+function calPrev() { calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; } renderCalendar(); }
+function calNext() { calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; } renderCalendar(); }
+function calJump(m) { calMonth = parseInt(m); renderCalendar(); }
+
+function renderCalendar() {
+  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  document.getElementById('cal-month-label').textContent = months[calMonth] + ' ' + calYear;
+
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const now = today();
+
+  // Build event map
+  const eventMap = {};
+  [...FELLOWSHIP_EVENTS, ...tasks.filter(t => t.due && t.status !== 'Done').map(t => ({ date: t.due, title: t.name, type: 'deadline', phase: t.phase }))].forEach(e => {
+    const d = toDate(e.date);
+    if (d.getFullYear() === calYear && d.getMonth() === calMonth) {
+      const key = d.getDate();
+      if (!eventMap[key]) eventMap[key] = [];
+      eventMap[key].push(e);
+    }
+  });
+
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let html = days.map(d => `<div class="cal-day-header">${d}</div>`).join('');
+
+  // Empty cells before first day
+  for (let i = 0; i < firstDay; i++) html += `<div class="cal-day other-month"></div>`;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const isToday = now.getDate() === d && now.getMonth() === calMonth && now.getFullYear() === calYear;
+    const events = eventMap[d] || [];
+    const typeMap = { session: '', deadline: 'orange', convening: 'green', alert: 'red' };
+    html += `<div class="cal-day ${isToday ? 'today' : ''}">
+      <div class="cal-day-num">${d}</div>
+      ${events.slice(0, 3).map(e => `<div class="cal-event ${typeMap[e.type] || ''}" title="${e.title}">${e.title.length > 20 ? e.title.slice(0,18)+'…' : e.title}</div>`).join('')}
+      ${events.length > 3 ? `<div style="font-size:10px;color:var(--gray)">+${events.length-3} more</div>` : ''}
+    </div>`;
+  }
+
+  // Pad end
+  const total = firstDay + daysInMonth;
+  const rem = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (let i = 0; i < rem; i++) html += `<div class="cal-day other-month"></div>`;
+
+  document.getElementById('cal-grid').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════
+// GANTT
+// ═══════════════════════════════════════════
+function renderGantt() {
+  const months = ["Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const monthStarts = [3,4,5,6,7,8,9,10,11]; // 0-indexed months for 2026
+
+  const phases = [
+    { name: "Pre-Launch", start: 3, end: 5, color: "phase0", desc: "Application, Review, Onboarding" },
+    { name: "Phase 1 · Grounding", start: 6, end: 6, color: "phase1", desc: "Sessions 1–3 + Lab" },
+    { name: "Phase 2 · Building", start: 7, end: 8, color: "phase2", desc: "Sessions 4–6 + Lab" },
+    { name: "Phase 3 · Baltimore", start: 8, end: 8, color: "phase3", desc: "In-Person Convening" },
+    { name: "Phase 4 · Applied Practice", start: 9, end: 11, color: "phase4", desc: "Sessions 7–10 + Close-Out" },
+  ];
+
+  const sessions = [
+    { name: "Application Window", start: 3, end: 3, color: "phase0" },
+    { name: "Review + Interviews", start: 4, end: 5, color: "phase0" },
+    { name: "Onboarding Sessions", start: 5, end: 5, color: "phase0" },
+    { name: "Session 1 – Cohort Launch", start: 6, end: 6, color: "phase1" },
+    { name: "Session 2 – Power + Roles", start: 6, end: 6, color: "phase1" },
+    { name: "Session 3 – Strategy Clarity", start: 6, end: 6, color: "phase1" },
+    { name: "Applied Lab 1", start: 6, end: 6, color: "phase1" },
+    { name: "Session 4 – Scope + Outcomes", start: 7, end: 7, color: "phase2" },
+    { name: "Session 5 – Work Planning", start: 7, end: 7, color: "phase2" },
+    { name: "Session 6 – Collab Tables", start: 7, end: 7, color: "phase2" },
+    { name: "Applied Lab 2 – Baltimore Prep", start: 8, end: 8, color: "phase2" },
+    { name: "Baltimore Convening (3 days)", start: 8, end: 8, color: "phase3" },
+    { name: "Session 7 – Risk + Adaptation", start: 9, end: 9, color: "phase4" },
+    { name: "Session 8 – Measurement", start: 9, end: 9, color: "phase4" },
+    { name: "Session 9 – Sustainability", start: 10, end: 10, color: "phase4" },
+    { name: "Session 10 – Capstone", start: 10, end: 10, color: "phase4" },
+    { name: "Post-Program Close-Out", start: 11, end: 11, color: "phase4" },
+  ];
+
+  const numMonths = months.length;
+
+  function barCells(start, end) {
+    return monthStarts.map((m, i) => {
+      if (m >= start && m <= end) {
+        const span = end - start + 1;
+        return `<td class="gantt-cell" style="padding:2px 3px;"><div class="gantt-bar ${end === start ? sessions.find(s=>s.start===start)?.color || 'phase0' : 'phase0'}"></div></td>`;
+      }
+      return '<td></td>';
+    }).join('');
+  }
+
+  function buildRow(item, isHeader = false) {
+    const cols = monthStarts.map(m => {
+      const inRange = m >= item.start && m <= item.end;
+      const isStart = m === item.start;
+      if (inRange) {
+        const span = item.end - item.start + 1;
+        return `<td style="padding:3px 2px;vertical-align:middle;"><div class="gantt-bar ${item.color}" title="${item.name}"></div></td>`;
+      }
+      return `<td></td>`;
+    }).join('');
+    return `<tr>
+      <td class="label-col" style="${isHeader ? 'font-weight:700;color:var(--purple)' : 'padding-left:12px;color:var(--gray)'}">${item.name}${item.desc ? `<br><span style="font-size:10px;font-weight:400;color:var(--gray)">${item.desc}</span>` : ''}</td>
+      ${cols}
+    </tr>`;
+  }
+
+  const headerRow = `<tr class="gantt-month-header">
+    <th class="label-col" style="background:var(--purple);color:white;border-radius:6px 0 0 0;">Item</th>
+    ${months.map(m => `<th class="month-head">${m}</th>`).join('')}
+  </tr>`;
+
+  // Section header rows
+  const phaseSection = `<tr><td colspan="${numMonths+1}" style="background:var(--cream);padding:6px 8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--purple);border-top:2px solid var(--orange)">PHASES</td></tr>`;
+  const sessionSection = `<tr><td colspan="${numMonths+1}" style="background:var(--cream);padding:6px 8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--purple);border-top:2px solid var(--orange)">SESSIONS & MILESTONES</td></tr>`;
+
+  document.getElementById('gantt-table').innerHTML = `
+    <thead>${headerRow}</thead>
+    <tbody>
+      ${phaseSection}
+      ${phases.map(p => buildRow(p, true)).join('')}
+      ${sessionSection}
+      ${sessions.map(s => buildRow(s)).join('')}
+    </tbody>`;
+}
+
+// ═══════════════════════════════════════════
+// TIMELINE TAB
+// ═══════════════════════════════════════════
+function renderTimeline() {
+  const prelaunch = [
+    { date: "2026-04-01", title: "Fellowship Application Opens", desc: "Call launch, information webinar, and application package published.", color: "orange" },
+    { date: "2026-04-07", title: "Informational Webinar", desc: "Virtual Q&A for prospective applicants.", color: "purple" },
+    { date: "2026-04-30", title: "Application Deadline", desc: "All applications must be submitted by 12PM EST.", color: "orange" },
+    { date: "2026-05-15", title: "Application Review + Status Notifications", desc: "Desk review; readiness interviews; finalist selection.", color: "purple" },
+    { date: "2026-05-29", title: "Finalist Interviews End", desc: "All finalist conversations complete.", color: "purple" },
+    { date: "2026-06-05", title: "Awardees Notified + Grant Agreements Signed", desc: "Final cohort confirmed; onboarding begins.", color: "green" },
+    { date: "2026-06-18", title: "Pre-Launch Office Hours", desc: "Virtual session to close readiness gaps and orient teams.", color: "purple" },
+    { date: "2026-06-23", title: "Baseline Diagnostic + Case Framing", desc: "Establish baseline skills and anchor each team in one live initiative.", color: "orange" },
+  ];
+
+  const fellowshipPhases = [
+    { date: "2026-07-01", title: "Phase 1 Begins – Virtual Launch", desc: "Fellowship officially launches. Intensive skill-building in July.", color: "orange" },
+    { date: "2026-08-01", title: "Phase 2 Begins – Building the Core Muscle", desc: "Scope, sequencing, collaborative tables, and work planning.", color: "orange" },
+    { date: "2026-09-15", title: "Phase 3 – Baltimore Convening", desc: "Three-day in-person convening for intensive practice and peer consultancy.", color: "green" },
+    { date: "2026-10-01", title: "Phase 4 Begins – Applied Practice and Proof Points", desc: "Risk management, measurement, sustainability, and capstone.", color: "yellow" },
+    { date: "2026-11-19", title: "Session 10 – Capstone and Closing", desc: "Final presentations, proof point gallery, celebration, and next-step commitments.", color: "purple" },
+    { date: "2026-12-10", title: "Optional Post-Program Follow-Up", desc: "Light-touch close-out checkpoint for early continuation documentation.", color: "purple" },
+  ];
+
+  const sessions = FELLOWSHIP_EVENTS.filter(e => e.type === 'session' || e.type === 'convening');
+
+  function tlHTML(items) {
+    return items.map(m => `
+      <div class="timeline-item">
+        <div class="timeline-dot ${m.color}"></div>
+        <div class="timeline-date">${fmtDateShort(m.date)}</div>
+        <div class="timeline-title">${m.title}</div>
+        <div class="timeline-desc">${m.desc || ''}</div>
+      </div>`).join('');
+  }
+
+  document.getElementById('tl-prelaunch').innerHTML = tlHTML(prelaunch);
+  document.getElementById('tl-phases').innerHTML = tlHTML(fellowshipPhases);
+  document.getElementById('tl-sessions').innerHTML = tlHTML(sessions.map(e => ({
+    ...e, desc: e.phase, color: e.type === 'convening' ? 'green' : 'orange'
+  })));
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderOverview();
+  renderTasks();
+  renderUpcoming();
+  // Set calendar to current month or April 2026
+  const now = today();
+  calYear = now.getFullYear();
+  calMonth = now.getMonth();
+  if (calYear < 2026) { calYear = 2026; calMonth = 3; }
+
+  // Update cal jump select
+  const calJumpSelect = document.getElementById('cal-jump');
+  if (calJumpSelect) calJumpSelect.value = calMonth;
+});
+
+// Close modal on overlay click
+document.getElementById('task-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
