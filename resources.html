@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>rooted/pwr — Resource + Template Bundle</title>
+<title>rooted/pwr - Resource + Template Bundle</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -138,6 +138,13 @@
 </head>
 <body>
 
+<!-- BACK NAV -->
+<div style="background:#2A1535;padding:8px 28px;display:flex;align-items:center;gap:12px;">
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.65);font-size:12px;font-weight:600;text-decoration:none;font-family:'DM Sans',sans-serif;letter-spacing:0.3px;" onmouseover="this.style.color='#F5A46B'" onmouseout="this.style.color='rgba(255,255,255,0.65)'">← Fellowship Hub</a>
+  <span style="color:rgba(255,255,255,0.2);">|</span>
+  <a href="dashboard.html" style="display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.65);font-size:12px;font-weight:600;text-decoration:none;font-family:'DM Sans',sans-serif;letter-spacing:0.3px;" onmouseover="this.style.color='#F5A46B'" onmouseout="this.style.color='rgba(255,255,255,0.65)'">Dashboard →</a>
+</div>
+
 <div class="top-bar">
   <div>
     <div class="logo">rooted<span>/pwr</span></div>
@@ -164,7 +171,7 @@
 <!-- ════════════════════ R1: READINESS INTAKE ════════════════════ -->
 <div id="panel-r1" class="resource-panel active">
   <div class="resource-header">
-    <div class="meta">Resource 1 · Release: Application Close — June Onboarding</div>
+    <div class="meta">Resource 1 · Release: Application Close - June Onboarding</div>
     <h1>Readiness Intake</h1>
     <p>Captures your live case, current implementation barriers, team composition, and desired proof points. Complete this before or during the application process. Your responses help PERC assess fit and tailor onboarding support.</p>
   </div>
@@ -183,10 +190,10 @@
       <select>
         <option value="">Select range…</option>
         <option>Under $250,000</option>
-        <option>$250,000 – $500,000</option>
-        <option>$500,000 – $1M</option>
-        <option>$1M – $3M</option>
-        <option>$3M – $5M</option>
+        <option>$250,000 - $500,000</option>
+        <option>$500,000 - $1M</option>
+        <option>$1M - $3M</option>
+        <option>$3M - $5M</option>
         <option>Over $5M</option>
       </select>
     </div>
@@ -214,11 +221,11 @@
     <div class="field-group"><label>Describe the initiative (250 words max)</label><textarea placeholder="What are you doing, for whom, and where? What specific justice challenge does it address?"></textarea><div class="hint">Include any lived or hard data that grounds the need.</div></div>
     <div class="field-group"><label>Current Implementation Status</label>
       <select>
-        <option>Conceptual — not yet designed</option>
-        <option>Planning — designing the approach</option>
-        <option>Early implementation — first activities underway</option>
-        <option>Active implementation — momentum built</option>
-        <option>Scaling — replicating or expanding</option>
+        <option>Conceptual - not yet designed</option>
+        <option>Planning - designing the approach</option>
+        <option>Early implementation - first activities underway</option>
+        <option>Active implementation - momentum built</option>
+        <option>Scaling - replicating or expanding</option>
       </select>
     </div>
     <div class="field-group"><label>Key implementation barriers you face</label><textarea placeholder="What has slowed, stalled, or blocked progress? Be specific."></textarea></div>
@@ -280,7 +287,7 @@
 
   <div class="form-section">
     <h3>Skill Confidence Ratings</h3>
-    <p style="font-size:13px;color:var(--gray);margin-bottom:12px">Rate your current confidence on each skill. Be honest — this is a starting point, not a judgment.</p>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:12px">Rate your current confidence on each skill. Be honest - this is a starting point, not a judgment.</p>
     <div class="rating-guide">
       <div class="chip chip-1">1 = No experience</div><div class="chip chip-2">2 = Some exposure</div>
       <div class="chip chip-3">3 = Developing</div><div class="chip chip-4">4 = Confident</div><div class="chip chip-5">5 = Teach others</div>
@@ -322,7 +329,7 @@
 <!-- ════════════════════ R3: INITIATIVE PROFILE ════════════════════ -->
 <div id="panel-r3" class="resource-panel">
   <div class="resource-header">
-    <div class="meta">Resource 3 · Release: June — Evolves Throughout Fellowship</div>
+    <div class="meta">Resource 3 · Release: June - Evolves Throughout Fellowship</div>
     <h1>Initiative Profile Template</h1>
     <p>A one-page living snapshot of your live case. Update this after each phase to reflect what you've learned and what has shifted.</p>
   </div>
@@ -331,7 +338,7 @@
     <h3>Initiative at a Glance</h3>
     <div class="two-col">
       <div class="field-group"><label>Initiative Name</label><input type="text"></div>
-      <div class="field-group"><label>Version / Date</label><input type="text" placeholder="e.g. v1 — June 2026"></div>
+      <div class="field-group"><label>Version / Date</label><input type="text" placeholder="e.g. v1 - June 2026"></div>
     </div>
     <div class="field-group"><label>Organization</label><input type="text"></div>
     <div class="field-group"><label>One-Sentence Description</label><input type="text" placeholder="What is this initiative, for whom, and toward what change?"></div>
@@ -439,7 +446,7 @@
   <div class="form-section">
     <h3>Initiative Summary</h3>
     <div class="field-group"><label>Initiative Name</label><input type="text"></div>
-    <div class="field-group"><label>Fellowship Phase</label><input type="text" placeholder="e.g. Phase 2 — August 2026"></div>
+    <div class="field-group"><label>Fellowship Phase</label><input type="text" placeholder="e.g. Phase 2 - August 2026"></div>
     <div class="field-group"><label>Primary Goal Statement</label><input type="text" placeholder="In one sentence, what is this initiative trying to achieve?"></div>
   </div>
 
@@ -501,7 +508,7 @@
     <h3>Plan Header</h3>
     <div class="two-col">
       <div class="field-group"><label>Initiative Name</label><input type="text"></div>
-      <div class="field-group"><label>Plan Period</label><input type="text" placeholder="e.g. August 6 – November 5, 2026"></div>
+      <div class="field-group"><label>Plan Period</label><input type="text" placeholder="e.g. August 6 - November 5, 2026"></div>
     </div>
     <div class="field-group"><label>Primary Goal for this 90-Day Period</label><input type="text"></div>
     <div class="field-group"><label>Success looks like…</label><input type="text" placeholder="By November 5, we will have…"></div>
@@ -589,7 +596,7 @@
         for(let i=0;i<4;i++) addParticipantRow();
       </script>
     </div>
-    <div class="field-group"><label>Agenda (max 3 items — be disciplined)</label>
+    <div class="field-group"><label>Agenda (max 3 items - be disciplined)</label>
       <table class="table-input"><thead><tr><th>#</th><th>Agenda Item</th><th>Time</th><th>Type</th><th>Lead</th></tr></thead>
       <tbody>
         <tr><td>1</td><td><input type="text"></td><td><input type="text" placeholder="e.g. 15 min"></td><td><select><option>Decision</option><option>Discussion</option><option>Information</option><option>Action</option></select></td><td><input type="text"></td></tr>
@@ -626,7 +633,7 @@
   <div class="resource-header">
     <div class="meta">Resource 8 · Release: September–October</div>
     <h1>Risk Register + Pivot Protocol</h1>
-    <p>Helps your team document risks, adaptation decisions, and unresolved tensions. Review this at every session in Phase 4. A pivot is not failure — it is disciplined leadership.</p>
+    <p>Helps your team document risks, adaptation decisions, and unresolved tensions. Review this at every session in Phase 4. A pivot is not failure - it is disciplined leadership.</p>
   </div>
 
   <div class="form-section">
@@ -665,13 +672,13 @@
 
   <div class="form-section">
     <h3>Pivot Protocol</h3>
-    <p style="font-size:13px;color:var(--gray);margin-bottom:10px">A pivot is a strategic course correction — not drift. Use this protocol to distinguish intentional adaptation from scope creep or loss of focus.</p>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:10px">A pivot is a strategic course correction - not drift. Use this protocol to distinguish intentional adaptation from scope creep or loss of focus.</p>
     <div class="field-group"><label>What triggered consideration of a pivot?</label><textarea></textarea></div>
     <div class="field-group"><label>What is being proposed to change, and why?</label><textarea></textarea></div>
     <div class="field-group"><label>Does this change serve the original community-rooted goal, or does it shift it?</label><textarea></textarea></div>
     <div class="field-group"><label>Who must be consulted or informed before finalizing this pivot?</label><textarea></textarea></div>
     <div class="field-group"><label>Decision</label>
-      <select><option>Proceed with pivot as described</option><option>Proceed with modifications</option><option>Do not pivot — stay the course</option><option>Escalate to PERC or external advisor</option></select>
+      <select><option>Proceed with pivot as described</option><option>Proceed with modifications</option><option>Do not pivot - stay the course</option><option>Escalate to PERC or external advisor</option></select>
     </div>
     <div class="field-group"><label>Decision rationale and notes</label><textarea></textarea></div>
     <div class="two-col">
@@ -773,7 +780,7 @@
   <div class="resource-header">
     <div class="meta">Resource 10 · Release: November</div>
     <h1>Capstone Deck Template</h1>
-    <p>A common format for your team's final reflection, artifacts, and next-step commitments. Present this at Session 10. The goal is not a polished deck — it is honest evidence of changed practice and clear commitments for what comes next.</p>
+    <p>A common format for your team's final reflection, artifacts, and next-step commitments. Present this at Session 10. The goal is not a polished deck - it is honest evidence of changed practice and clear commitments for what comes next.</p>
   </div>
 
   <div class="form-section">
@@ -805,7 +812,7 @@
     <div class="capstone-slide">
       <div class="slide-num">3</div>
       <h4>Where We Started: Baseline Snapshot</h4>
-      <p>What your team looked like in June — confidence levels, systems, and the state of your initiative.</p>
+      <p>What your team looked like in June - confidence levels, systems, and the state of your initiative.</p>
       <textarea placeholder="Reference your baseline diagnostic. Where were you weakest? What was fragile?"></textarea>
     </div>
 
@@ -819,7 +826,7 @@
     <div class="capstone-slide">
       <div class="slide-num">5</div>
       <h4>Proof Points: What Changed</h4>
-      <p>The evidence — qualitative and quantitative — that rooted/pwr shifted practice, coordination, and credibility.</p>
+      <p>The evidence - qualitative and quantitative - that rooted/pwr shifted practice, coordination, and credibility.</p>
       <textarea placeholder="Share 3–5 specific proof points. Reference your Proof Points Log. Be concrete."></textarea>
     </div>
 

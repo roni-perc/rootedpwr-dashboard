@@ -400,6 +400,13 @@
 </head>
 <body>
 
+<!-- BACK NAV -->
+<div style="background:#2A1535;padding:8px 28px;display:flex;align-items:center;gap:12px;">
+  <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.65);font-size:12px;font-weight:600;text-decoration:none;font-family:'DM Sans',sans-serif;letter-spacing:0.3px;" onmouseover="this.style.color='#F5A46B'" onmouseout="this.style.color='rgba(255,255,255,0.65)'">← Fellowship Hub</a>
+  <span style="color:rgba(255,255,255,0.2);">|</span>
+  <a href="resources.html" style="display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.65);font-size:12px;font-weight:600;text-decoration:none;font-family:'DM Sans',sans-serif;letter-spacing:0.3px;" onmouseover="this.style.color='#F5A46B'" onmouseout="this.style.color='rgba(255,255,255,0.65)'">Resource Bundle →</a>
+</div>
+
 <!-- HEADER -->
 <div class="site-header">
   <div>
@@ -568,7 +575,7 @@
 <div id="tab-gantt" class="tab-panel">
   <div class="card">
     <div class="card-header">
-      <div class="card-title">Fellowship Gantt Chart — April–December 2026</div>
+      <div class="card-title">Fellowship Gantt Chart - April–December 2026</div>
     </div>
     <div class="gantt-wrap">
       <table class="gantt-table" id="gantt-table"></table>
@@ -658,28 +665,28 @@ const FELLOWSHIP_EVENTS = [
   { date: "2026-06-23", title: "Baseline Diagnostic + Case Framing (Virtual, 2hr)", type: "session", phase: "Pre-Launch" },
   // PHASE 1
   { date: "2026-07-01", title: "Virtual Fellowship Launch", type: "session", phase: "Phase 1" },
-  { date: "2026-07-07", title: "Session 1 – Cohort Launch (Virtual, 2hr)", type: "session", phase: "Phase 1" },
+  { date: "2026-07-07", title: "Session 1 - Cohort Launch (Virtual, 2hr)", type: "session", phase: "Phase 1" },
   { date: "2026-07-07", title: "Initiative Profile v1 DUE", type: "deadline", phase: "Phase 1" },
-  { date: "2026-07-16", title: "Session 2 – Power, Roles, and Shared Ownership (Virtual, 2hr)", type: "session", phase: "Phase 1" },
-  { date: "2026-07-28", title: "Session 3 – Strategy Clarity and Catalytic Capital (Virtual, 2hr)", type: "session", phase: "Phase 1" },
+  { date: "2026-07-16", title: "Session 2 - Power, Roles, and Shared Ownership (Virtual, 2hr)", type: "session", phase: "Phase 1" },
+  { date: "2026-07-28", title: "Session 3 - Strategy Clarity and Catalytic Capital (Virtual, 2hr)", type: "session", phase: "Phase 1" },
   { date: "2026-07-28", title: "Strategy Clarity Brief DUE (48hr before lab)", type: "deadline", phase: "Phase 1" },
   { date: "2026-07-30", title: "Applied Lab 1 (Virtual, 1.5hr)", type: "session", phase: "Phase 1" },
   // PHASE 2
-  { date: "2026-08-06", title: "Session 4 – Scope, Outcomes, and Accountability (Virtual, 2hr)", type: "session", phase: "Phase 2" },
-  { date: "2026-08-18", title: "Session 5 – Sequencing, Dependencies, Work Planning (Virtual, 2hr)", type: "session", phase: "Phase 2" },
-  { date: "2026-08-27", title: "Session 6 – Collaborative Tables and Stakeholder Alignment (Virtual, 2hr)", type: "session", phase: "Phase 2" },
+  { date: "2026-08-06", title: "Session 4 - Scope, Outcomes, and Accountability (Virtual, 2hr)", type: "session", phase: "Phase 2" },
+  { date: "2026-08-18", title: "Session 5 - Sequencing, Dependencies, Work Planning (Virtual, 2hr)", type: "session", phase: "Phase 2" },
+  { date: "2026-08-27", title: "Session 6 - Collaborative Tables and Stakeholder Alignment (Virtual, 2hr)", type: "session", phase: "Phase 2" },
   { date: "2026-09-01", title: "Draft Work Plan + Collab Table Memo DUE (pre-lab)", type: "deadline", phase: "Phase 2" },
-  { date: "2026-09-03", title: "Applied Lab 2 – Baltimore Prep (Virtual, 1.5hr)", type: "session", phase: "Phase 2" },
+  { date: "2026-09-03", title: "Applied Lab 2 - Baltimore Prep (Virtual, 1.5hr)", type: "session", phase: "Phase 2" },
   // PHASE 3
-  { date: "2026-09-15", title: "Convening Day 1 – Grounding in Place (Baltimore, PM)", type: "convening", phase: "Phase 3" },
-  { date: "2026-09-16", title: "Convening Day 2 – Intensive Practice (Baltimore, Full Day)", type: "convening", phase: "Phase 3" },
-  { date: "2026-09-17", title: "Convening Day 3 – Forward Planning (Baltimore, Half Day)", type: "convening", phase: "Phase 3" },
+  { date: "2026-09-15", title: "Convening Day 1 - Grounding in Place (Baltimore, PM)", type: "convening", phase: "Phase 3" },
+  { date: "2026-09-16", title: "Convening Day 2 - Intensive Practice (Baltimore, Full Day)", type: "convening", phase: "Phase 3" },
+  { date: "2026-09-17", title: "Convening Day 3 - Forward Planning (Baltimore, Half Day)", type: "convening", phase: "Phase 3" },
   // PHASE 4
-  { date: "2026-10-06", title: "Session 7 – Risk, Adaptation, and Escalation (Virtual, 2hr)", type: "session", phase: "Phase 4" },
-  { date: "2026-10-22", title: "Session 8 – Measurement, Monitoring, and Meaning-Making (Virtual, 2hr)", type: "session", phase: "Phase 4" },
-  { date: "2026-11-05", title: "Session 9 – Sustainability and Internalization (Virtual, 2hr)", type: "session", phase: "Phase 4" },
+  { date: "2026-10-06", title: "Session 7 - Risk, Adaptation, and Escalation (Virtual, 2hr)", type: "session", phase: "Phase 4" },
+  { date: "2026-10-22", title: "Session 8 - Measurement, Monitoring, and Meaning-Making (Virtual, 2hr)", type: "session", phase: "Phase 4" },
+  { date: "2026-11-05", title: "Session 9 - Sustainability and Internalization (Virtual, 2hr)", type: "session", phase: "Phase 4" },
   { date: "2026-11-17", title: "Capstone Materials + Proof Points Log DUE", type: "deadline", phase: "Phase 4" },
-  { date: "2026-11-19", title: "Session 10 – Capstone Reflection and Proof Points (Virtual, 2hr)", type: "session", phase: "Phase 4" },
+  { date: "2026-11-19", title: "Session 10 - Capstone Reflection and Proof Points (Virtual, 2hr)", type: "session", phase: "Phase 4" },
   { date: "2026-12-10", title: "Optional Post-Program Close-Out Checkpoint (Virtual, 1.5hr)", type: "session", phase: "Phase 4" },
 ];
 
@@ -695,31 +702,48 @@ const DEFAULT_TASKS = [
   { id: 9, name: "Facilitate Pre-Launch Office Hours session", phase: "Pre-Launch", owner: "Deidre Thomas", due: "2026-06-18", status: "To Do", notes: "" },
   { id: 10, name: "Facilitate Baseline Diagnostic + Case Framing session", phase: "Pre-Launch", owner: "Deidre Thomas", due: "2026-06-23", status: "To Do", notes: "" },
   { id: 11, name: "Prepare and distribute Session 1 materials", phase: "Phase 1", owner: "PERC Team", due: "2026-07-03", status: "To Do", notes: "" },
-  { id: 12, name: "Facilitate Session 1 – Cohort Launch", phase: "Phase 1", owner: "Deidre Thomas", due: "2026-07-07", status: "To Do", notes: "" },
+  { id: 12, name: "Facilitate Session 1 - Cohort Launch", phase: "Phase 1", owner: "Deidre Thomas", due: "2026-07-07", status: "To Do", notes: "" },
   { id: 13, name: "Collect Initiative Profile v1 from all teams", phase: "Phase 1", owner: "PERC Team", due: "2026-07-14", status: "To Do", notes: "" },
-  { id: 14, name: "Facilitate Session 2 – Power, Roles, and Shared Ownership", phase: "Phase 1", owner: "Deidre Thomas", due: "2026-07-16", status: "To Do", notes: "" },
-  { id: 15, name: "Facilitate Session 3 – Strategy Clarity and Catalytic Capital", phase: "Phase 1", owner: "Deidre Thomas", due: "2026-07-28", status: "To Do", notes: "" },
+  { id: 14, name: "Facilitate Session 2 - Power, Roles, and Shared Ownership", phase: "Phase 1", owner: "Deidre Thomas", due: "2026-07-16", status: "To Do", notes: "" },
+  { id: 15, name: "Facilitate Session 3 - Strategy Clarity and Catalytic Capital", phase: "Phase 1", owner: "Deidre Thomas", due: "2026-07-28", status: "To Do", notes: "" },
   { id: 16, name: "Facilitate Applied Lab 1", phase: "Phase 1", owner: "Deidre Thomas", due: "2026-07-30", status: "To Do", notes: "" },
-  { id: 17, name: "Facilitate Session 4 – Scope, Outcomes, and Accountability", phase: "Phase 2", owner: "Deidre Thomas", due: "2026-08-06", status: "To Do", notes: "" },
-  { id: 18, name: "Facilitate Session 5 – Sequencing, Dependencies, Work Planning", phase: "Phase 2", owner: "Deidre Thomas", due: "2026-08-18", status: "To Do", notes: "" },
-  { id: 19, name: "Facilitate Session 6 – Collaborative Tables and Stakeholder Alignment", phase: "Phase 2", owner: "Deidre Thomas", due: "2026-08-27", status: "To Do", notes: "" },
-  { id: 20, name: "Facilitate Applied Lab 2 – Baltimore Prep", phase: "Phase 2", owner: "Deidre Thomas", due: "2026-09-03", status: "To Do", notes: "" },
+  { id: 17, name: "Facilitate Session 4 - Scope, Outcomes, and Accountability", phase: "Phase 2", owner: "Deidre Thomas", due: "2026-08-06", status: "To Do", notes: "" },
+  { id: 18, name: "Facilitate Session 5 - Sequencing, Dependencies, Work Planning", phase: "Phase 2", owner: "Deidre Thomas", due: "2026-08-18", status: "To Do", notes: "" },
+  { id: 19, name: "Facilitate Session 6 - Collaborative Tables and Stakeholder Alignment", phase: "Phase 2", owner: "Deidre Thomas", due: "2026-08-27", status: "To Do", notes: "" },
+  { id: 20, name: "Facilitate Applied Lab 2 - Baltimore Prep", phase: "Phase 2", owner: "Deidre Thomas", due: "2026-09-03", status: "To Do", notes: "" },
   { id: 21, name: "Finalize Baltimore convening logistics and venue", phase: "Phase 3", owner: "PERC Team", due: "2026-08-31", status: "To Do", notes: "Confirm catering, AV, hotel rooms" },
-  { id: 22, name: "Facilitate Convening Day 1 – Grounding in Place", phase: "Phase 3", owner: "Deidre Thomas", due: "2026-09-15", status: "To Do", notes: "Baltimore" },
-  { id: 23, name: "Facilitate Convening Day 2 – Intensive Practice", phase: "Phase 3", owner: "Deidre Thomas", due: "2026-09-16", status: "To Do", notes: "" },
-  { id: 24, name: "Facilitate Convening Day 3 – Forward Planning", phase: "Phase 3", owner: "Deidre Thomas", due: "2026-09-17", status: "To Do", notes: "" },
-  { id: 25, name: "Facilitate Session 7 – Risk, Adaptation, and Escalation", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-10-06", status: "To Do", notes: "" },
-  { id: 26, name: "Facilitate Session 8 – Measurement, Monitoring, and Meaning-Making", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-10-22", status: "To Do", notes: "" },
-  { id: 27, name: "Facilitate Session 9 – Sustainability and Internalization", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-11-05", status: "To Do", notes: "" },
+  { id: 22, name: "Facilitate Convening Day 1 - Grounding in Place", phase: "Phase 3", owner: "PERC Team", due: "2026-09-15", status: "To Do", notes: "Baltimore" },
+  { id: 23, name: "Facilitate Convening Day 2 - Intensive Practice", phase: "Phase 3", owner: "PERC Team", due: "2026-09-16", status: "To Do", notes: "" },
+  { id: 24, name: "Facilitate Convening Day 3 - Forward Planning", phase: "Phase 3", owner: "PERC Team", due: "2026-09-17", status: "To Do", notes: "" },
+  { id: 25, name: "Facilitate Session 7 - Risk, Adaptation, and Escalation", phase: "Phase 4", owner: "Roni", due: "2026-10-06", status: "To Do", notes: "" },
+  { id: 26, name: "Facilitate Session 8 - Measurement, Monitoring, and Meaning-Making", phase: "Phase 4", owner: "Roni", due: "2026-10-22", status: "To Do", notes: "" },
+  { id: 27, name: "Facilitate Session 9 - Sustainability and Internalization", phase: "Phase 4", owner: "Roni", due: "2026-11-05", status: "To Do", notes: "" },
+  { id: 28, name: "Collect capstone decks and proof points logs from all teams", phase: "Phase 4", owner: "Roni", due: "2026-11-17", status: "To Do", notes: "" },
+  { id: 29, name: "Facilitate Session 10 - Capstone Reflection and Proof Points", phase: "Phase 4", owner: "PERC Team", due: "2026-11-19", status: "To Do", notes: "" },
+  { id: 30, name: "Optional Post-Program Close-Out Checkpoint", phase: "Phase 4", owner: "Roni", due: "2026-12-10", status: "To Do", notes: "" },
+]; "To Do", notes: "Confirm catering, AV, hotel rooms" },
+  { id: 22, name: "Facilitate Convening Day 1 - Grounding in Place", phase: "Phase 3", owner: "Deidre Thomas", due: "2026-09-15", status: "To Do", notes: "Baltimore" },
+  { id: 23, name: "Facilitate Convening Day 2 - Intensive Practice", phase: "Phase 3", owner: "Deidre Thomas", due: "2026-09-16", status: "To Do", notes: "" },
+  { id: 24, name: "Facilitate Convening Day 3 - Forward Planning", phase: "Phase 3", owner: "Deidre Thomas", due: "2026-09-17", status: "To Do", notes: "" },
+  { id: 25, name: "Facilitate Session 7 - Risk, Adaptation, and Escalation", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-10-06", status: "To Do", notes: "" },
+  { id: 26, name: "Facilitate Session 8 - Measurement, Monitoring, and Meaning-Making", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-10-22", status: "To Do", notes: "" },
+  { id: 27, name: "Facilitate Session 9 - Sustainability and Internalization", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-11-05", status: "To Do", notes: "" },
   { id: 28, name: "Collect capstone decks and proof points logs from all teams", phase: "Phase 4", owner: "PERC Team", due: "2026-11-17", status: "To Do", notes: "" },
-  { id: 29, name: "Facilitate Session 10 – Capstone Reflection and Proof Points", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-11-19", status: "To Do", notes: "" },
+  { id: 29, name: "Facilitate Session 10 - Capstone Reflection and Proof Points", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-11-19", status: "To Do", notes: "" },
   { id: 30, name: "Optional Post-Program Close-Out Checkpoint", phase: "Phase 4", owner: "Deidre Thomas", due: "2026-12-10", status: "To Do", notes: "" },
 ];
 
 // ═══════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════
-let tasks = JSON.parse(localStorage.getItem('rp_tasks') || 'null') || DEFAULT_TASKS;
+const TASK_VERSION = "v2";
+let tasks = (localStorage.getItem('rp_task_version') === TASK_VERSION)
+  ? (JSON.parse(localStorage.getItem('rp_tasks') || 'null') || DEFAULT_TASKS)
+  : DEFAULT_TASKS;
+if (localStorage.getItem('rp_task_version') !== TASK_VERSION) {
+  localStorage.setItem('rp_task_version', TASK_VERSION);
+  saveTasks();
+}
 let editingId = null;
 let calYear = 2026;
 let calMonth = 3; // April (0-indexed)
@@ -1097,19 +1121,19 @@ function renderGantt() {
     { name: "Application Window", start: 3, end: 3, color: "phase0" },
     { name: "Review + Interviews", start: 4, end: 5, color: "phase0" },
     { name: "Onboarding Sessions", start: 5, end: 5, color: "phase0" },
-    { name: "Session 1 – Cohort Launch", start: 6, end: 6, color: "phase1" },
-    { name: "Session 2 – Power + Roles", start: 6, end: 6, color: "phase1" },
-    { name: "Session 3 – Strategy Clarity", start: 6, end: 6, color: "phase1" },
+    { name: "Session 1 - Cohort Launch", start: 6, end: 6, color: "phase1" },
+    { name: "Session 2 - Power + Roles", start: 6, end: 6, color: "phase1" },
+    { name: "Session 3 - Strategy Clarity", start: 6, end: 6, color: "phase1" },
     { name: "Applied Lab 1", start: 6, end: 6, color: "phase1" },
-    { name: "Session 4 – Scope + Outcomes", start: 7, end: 7, color: "phase2" },
-    { name: "Session 5 – Work Planning", start: 7, end: 7, color: "phase2" },
-    { name: "Session 6 – Collab Tables", start: 7, end: 7, color: "phase2" },
-    { name: "Applied Lab 2 – Baltimore Prep", start: 8, end: 8, color: "phase2" },
+    { name: "Session 4 - Scope + Outcomes", start: 7, end: 7, color: "phase2" },
+    { name: "Session 5 - Work Planning", start: 7, end: 7, color: "phase2" },
+    { name: "Session 6 - Collab Tables", start: 7, end: 7, color: "phase2" },
+    { name: "Applied Lab 2 - Baltimore Prep", start: 8, end: 8, color: "phase2" },
     { name: "Baltimore Convening (3 days)", start: 8, end: 8, color: "phase3" },
-    { name: "Session 7 – Risk + Adaptation", start: 9, end: 9, color: "phase4" },
-    { name: "Session 8 – Measurement", start: 9, end: 9, color: "phase4" },
-    { name: "Session 9 – Sustainability", start: 10, end: 10, color: "phase4" },
-    { name: "Session 10 – Capstone", start: 10, end: 10, color: "phase4" },
+    { name: "Session 7 - Risk + Adaptation", start: 9, end: 9, color: "phase4" },
+    { name: "Session 8 - Measurement", start: 9, end: 9, color: "phase4" },
+    { name: "Session 9 - Sustainability", start: 10, end: 10, color: "phase4" },
+    { name: "Session 10 - Capstone", start: 10, end: 10, color: "phase4" },
     { name: "Post-Program Close-Out", start: 11, end: 11, color: "phase4" },
   ];
 
@@ -1176,11 +1200,11 @@ function renderTimeline() {
   ];
 
   const fellowshipPhases = [
-    { date: "2026-07-01", title: "Phase 1 Begins – Virtual Launch", desc: "Fellowship officially launches. Intensive skill-building in July.", color: "orange" },
-    { date: "2026-08-01", title: "Phase 2 Begins – Building the Core Muscle", desc: "Scope, sequencing, collaborative tables, and work planning.", color: "orange" },
-    { date: "2026-09-15", title: "Phase 3 – Baltimore Convening", desc: "Three-day in-person convening for intensive practice and peer consultancy.", color: "green" },
-    { date: "2026-10-01", title: "Phase 4 Begins – Applied Practice and Proof Points", desc: "Risk management, measurement, sustainability, and capstone.", color: "yellow" },
-    { date: "2026-11-19", title: "Session 10 – Capstone and Closing", desc: "Final presentations, proof point gallery, celebration, and next-step commitments.", color: "purple" },
+    { date: "2026-07-01", title: "Phase 1 Begins - Virtual Launch", desc: "Fellowship officially launches. Intensive skill-building in July.", color: "orange" },
+    { date: "2026-08-01", title: "Phase 2 Begins - Building the Core Muscle", desc: "Scope, sequencing, collaborative tables, and work planning.", color: "orange" },
+    { date: "2026-09-15", title: "Phase 3 - Baltimore Convening", desc: "Three-day in-person convening for intensive practice and peer consultancy.", color: "green" },
+    { date: "2026-10-01", title: "Phase 4 Begins - Applied Practice and Proof Points", desc: "Risk management, measurement, sustainability, and capstone.", color: "yellow" },
+    { date: "2026-11-19", title: "Session 10 - Capstone and Closing", desc: "Final presentations, proof point gallery, celebration, and next-step commitments.", color: "purple" },
     { date: "2026-12-10", title: "Optional Post-Program Follow-Up", desc: "Light-touch close-out checkpoint for early continuation documentation.", color: "purple" },
   ];
 
